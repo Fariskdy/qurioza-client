@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* Light theme - Clean, minimal light theme */
+        --background: 0 0% 100%;
+        /* Pure white */
+        --foreground: 240 10% 3.9%;
+        /* Near black for text */
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        /* Near black for primary elements */
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        /* Light gray for secondary elements */
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 5.9% 10%;
+        --radius: 0.75rem;
+    }
+
+    /* Enable smooth scrolling globally */
+    html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .dark {
+        /* Base colors */
+        --background: 200 29% 11%;
+        /* #131F24 - Main dark background */
+        --foreground: 210 20% 98%;
+        /* Light gray for text */
+
+        /* Card and surfaces */
+        --card: 201 28% 17%;
+        /* #202F36 */
+        --card-foreground: 210 20% 98%;
+        /* Light gray for card text */
+        --popover: 201 28% 17%;
+        --popover-foreground: 210 20% 98%;
+
+        /* Primary colors */
+        --primary: 200 83% 32%;
+        /* #0B4F6C - Primary blue */
+        --primary-foreground: 210 20% 98%;
+
+        /* Secondary and muted */
+        --secondary: 200 23% 25%;
+        /* #2A3F47 */
+        --secondary-foreground: 210 20% 98%;
+        --muted: 200 23% 25%;
+        /* #2A3F47 */
+        --muted-foreground: 210 40% 80%;
+        /* Lighter gray for muted text */
+
+        /* Accent */
+        --accent: 200 23% 25%;
+        /* #2A3F47 */
+        --accent-foreground: 210 20% 98%;
+
+        /* Borders and inputs */
+        --border: 200 25% 20%;
+        /* #1D2F36 */
+        --input: 200 25% 20%;
+        --ring: 200 83% 32%;
+
+        /* Refined scrollbar */
+        ::-webkit-scrollbar-thumb {
+            background: #2A3F47;
+            border: 3px solid #131F24;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #344B54;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #131F24;
+        }
+    }
+
+    /* Custom Scrollbar Styles */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+        transition: all 0.2s ease;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: hsl(240 5% 84%);
+        border-radius: 9999px;
+        transition: background-color 0.2s ease;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: hsl(240 5% 75%);
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+        background: hsl(240 5% 26%);
+    }
+
+    .dark ::-webkit-scrollbar-thumb:hover {
+        background: hsl(240 5% 35%);
+    }
+
+    /* Firefox */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: hsl(240 5% 84%) transparent;
+        scroll-behavior: smooth;
+    }
+
+    .dark * {
+        scrollbar-color: hsl(240 5% 26%) transparent;
+    }
+
+    /* Dashboard-specific dark mode overrides */
+    .dark .dashboard-sidebar {
+        @apply bg-[#131F24] border-[#202F36];
+    }
+
+    .dark .dashboard-card {
+        @apply bg-[#202F36] border-[#2A3F47];
+    }
+
+    .dark .dashboard-header {
+        @apply bg-[#131F24]/95 border-[#202F36];
+    }
+
+    .dark .dashboard-icon {
+        @apply text-[#E3E5E5] hover:text-white;
+    }
+
+    /* Custom Scrollbar Styles */
+    .dark ::-webkit-scrollbar-thumb {
+        background: #2A3F47;
+    }
+
+    .dark ::-webkit-scrollbar-thumb:hover {
+        background: #344B54;
+    }
+
+    .dark * {
+        scrollbar-color: #2a2d30 transparent;
+    }
+
+    /* Add to index.css */
+    .dark,
+    html {
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Add transition classes for elements */
+    .theme-transition {
+        @apply transition-colors duration-300;
+    }
+}
