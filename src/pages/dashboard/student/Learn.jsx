@@ -228,7 +228,9 @@ export default function Learn() {
                     className="w-full h-full flex items-center justify-center gap-2 rounded-md data-[state=active]:bg-violet-50 dark:data-[state=active]:bg-violet-500/10 data-[state=active]:text-violet-700 dark:data-[state=active]:text-violet-300 data-[state=active]:shadow-sm transition-all"
                   >
                     <BookOpen className="h-5 w-5" />
-                    <span className="font-semibold text-base">Course Content</span>
+                    <span className="font-semibold text-base">
+                      Course Content
+                    </span>
                   </TabsTrigger>
                   <TabsTrigger
                     value="activities"
