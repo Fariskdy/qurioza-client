@@ -16,13 +16,11 @@ export function AuthProvider({ children }) {
         const response = await api.get("/auth/me");
         setUser(response.data.user);
       } catch (err) {
-        // Only clear user state for actual auth failures
+        // Clear user state for any error
+        setUser(null);
+        // Don't redirect on initial auth check
         if (err.response?.status === 401) {
-          setUser(null);
           console.log("User not authenticated");
-        } else {
-          // For network errors, keep existing user state
-          console.log("Auth check failed:", err);
         }
       } finally {
         setLoading(false);

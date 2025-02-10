@@ -37,32 +37,24 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const isAuthEndpoint = originalRequest.url.includes('/auth/');
 
-    // Don't show toast for refresh token or auth check endpoints
-    const isAuthEndpoint =
-      originalRequest.url.includes("/auth/refresh-token") ||
-      originalRequest.url.includes("/auth/me");
-
-    // Handle 401 errors
     if (error.response?.status === 401 && !originalRequest._retry) {
-      if (!isAuthEndpoint) {
+      try {
         originalRequest._retry = true;
-        try {
-          await api.post("/auth/refresh-token");
-          return api(originalRequest);
-        } catch (refreshError) {
-          // Only redirect to login if refresh token fails
-          if (!window.location.pathname.startsWith("/auth/")) {
-            window.location.href = "/auth/login";
-          }
-          return Promise.reject(refreshError);
+        await api.post('/auth/refresh-token');
+        return api(originalRequest);
+      } catch (refreshError) {
+        if (!window.location.pathname.startsWith('/auth/')) {
+          // Add timeout to prevent race conditions
+          setTimeout(() => {
+            window.location.href = '/auth/login';
+          }, 100);
         }
+        return Promise.reject(refreshError);
       }
-    } else if (!isAuthEndpoint && error.response) {
-      // Only show toast for response errors
-      showErrorToast(error);
     }
-
+    
     return Promise.reject(error);
   }
 );
