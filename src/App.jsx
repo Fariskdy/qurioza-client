@@ -49,8 +49,13 @@ const queryClient = new QueryClient({
 
 function App() {
   const location = useLocation();
+  const { loading: authLoading } = useAuth();
   const isAuthPage = location.pathname.startsWith("/auth/");
   const isDashboardPage = location.pathname.startsWith("/dashboard");
+
+  if (authLoading && isDashboardPage) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <LayoutProvider>
@@ -59,7 +64,7 @@ function App() {
           <ScrollToTop />
           {!isAuthPage && !isDashboardPage && <MainNav />}
           <Routes>
-            {/* Public Routes */}
+            {/* Public Routes - No auth check needed */}
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -69,41 +74,22 @@ function App() {
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:slug" element={<CourseDetails />} />
 
-            {/* Auth Routes */}
+            {/* Auth Routes - Redirect if logged in */}
             <Route
-              path="/auth/login"
+              path="/auth/*"
               element={
                 <AuthRoute>
-                  <Login />
-                </AuthRoute>
-              }
-            />
-            <Route
-              path="/auth/register"
-              element={
-                <AuthRoute>
-                  <Register />
-                </AuthRoute>
-              }
-            />
-            <Route
-              path="/auth/forgot-password"
-              element={
-                <AuthRoute>
-                  <ForgotPassword />
-                </AuthRoute>
-              }
-            />
-            <Route
-              path="/auth/reset-password"
-              element={
-                <AuthRoute>
-                  <ResetPassword />
+                  <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
+                  </Routes>
                 </AuthRoute>
               }
             />
 
-            {/* Dashboard Routes */}
+            {/* Protected Routes - Require auth */}
             <Route
               path="/dashboard/*"
               element={
