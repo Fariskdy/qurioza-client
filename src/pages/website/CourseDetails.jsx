@@ -80,7 +80,6 @@ export function CourseDetails() {
     setEnrollmentError(null);
 
     if (!user) {
-      // Save the current location to return after login
       navigate("/auth/login", {
         state: { from: location.pathname },
       });
