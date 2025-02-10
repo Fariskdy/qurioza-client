@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { api } from "@/api/axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AuthContext = createContext({});
 
@@ -8,6 +9,8 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Only check auth status once on mount
   useEffect(() => {
@@ -44,6 +47,11 @@ export function AuthProvider({ children }) {
       setError(null);
       const { data } = await api.post("/auth/login", { email, password });
       setUser(data.user);
+
+      // Get the redirect path from state, or default to dashboard
+      const from = location.state?.from || "/dashboard";
+      navigate(from, { replace: true });
+
       return data.user;
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");

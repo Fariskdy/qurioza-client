@@ -65,7 +65,9 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // Only redirect if on a protected route
         if (isProtectedRoute(window.location.pathname)) {
-          window.location.href = "/auth/login";
+          window.location.href = `/auth/login?from=${encodeURIComponent(
+            window.location.pathname
+          )}`;
         }
         return Promise.reject(refreshError);
       }

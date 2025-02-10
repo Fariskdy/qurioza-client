@@ -35,7 +35,15 @@ const ReactQueryDevtools = import.meta.env.DEV
 // New component for protected auth routes
 function AuthRoute({ children }) {
   const { user } = useAuth();
-  return user ? <Navigate to="/dashboard" replace /> : children;
+  const location = useLocation();
+
+  if (user) {
+    // Get the redirect path from state, or default to dashboard
+    const from = location.state?.from || "/dashboard";
+    return <Navigate to={from} replace />;
+  }
+
+  return children;
 }
 
 AuthRoute.propTypes = {
