@@ -53,12 +53,12 @@ function App() {
   const isDashboardPage = location.pathname.startsWith("/dashboard");
 
   return (
-    <LayoutProvider>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <ScrollToTop />
-          {!isAuthPage && !isDashboardPage && <MainNav />}
-          <BrowserRouter basename="/">
+    <BrowserRouter>
+      <LayoutProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <ScrollToTop />
+            {!isAuthPage && !isDashboardPage && <MainNav />}
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
@@ -116,11 +116,11 @@ function App() {
                 }
               />
             </Routes>
-          </BrowserRouter>
-          {/* {ReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />} */}
-        </AuthProvider>
-      </QueryClientProvider>
-    </LayoutProvider>
+            {/* {ReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />} */}
+          </AuthProvider>
+        </QueryClientProvider>
+      </LayoutProvider>
+    </BrowserRouter>
   );
 }
 
