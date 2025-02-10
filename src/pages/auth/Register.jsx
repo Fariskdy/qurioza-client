@@ -1,19 +1,12 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  GraduationCap,
-  Mail,
-  Lock,
-  Github,
-  ArrowRight,
-  User,
-} from "lucide-react";
-import { GoogleIcon } from "@/components/icons/GoogleIcon";
+import { GraduationCap, Mail, Lock, ArrowRight, User } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import authIllustration from "@/assets/illustrations/auth-illustration.svg";
 
 export function Register() {
   const navigate = useNavigate();
@@ -61,199 +54,212 @@ export function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-background relative flex overflow-hidden">
-      {/* Background Design */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10" />
-      <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
-      <div className="absolute -left-20 top-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px] dark:from-violet-500/10 dark:to-purple-500/20" />
-      <div className="absolute -right-20 bottom-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px] dark:from-violet-500/10 dark:to-purple-500/20" />
+    <div className="min-h-screen bg-background flex">
+      {/* Left Panel - Form */}
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-background relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-50/50 via-background to-purple-50/30 dark:from-violet-950/20 dark:via-background dark:to-purple-900/10" />
+        <div className="absolute inset-0 bg-grid-black/[0.01] dark:bg-grid-white/[0.01]" />
 
-      {/* Content */}
-      <div className="flex-1 flex items-center justify-center min-h-screen py-6 px-4 sm:px-6">
-        <div className="relative w-full max-w-[420px]">
-          <div className="rounded-2xl border bg-background/60 backdrop-blur-lg shadow-sm p-4 sm:p-6 space-y-4">
-            {/* Logo */}
-            <div className="text-center space-y-1.5">
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2.5 text-xl font-bold"
-              >
-                <div className="rounded-xl bg-gradient-to-tr from-primary/20 to-violet-400/20 p-1.5">
-                  <GraduationCap className="h-6 w-6 text-primary" />
-                </div>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary/90 to-violet-600">
-                  Qurioza
-                </span>
-              </Link>
-              <div className="space-y-1">
-                <h1 className="text-2xl font-semibold tracking-tight">
-                  Create an account
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Enter your details to get started
-                </p>
+        {/* Content */}
+        <div className="w-full max-w-[440px] relative">
+          {/* Logo Section */}
+          <div className="mb-16">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2.5 text-xl font-bold"
+            >
+              <div className="rounded-xl bg-violet-600 p-2 shadow-lg shadow-violet-500/20">
+                <GraduationCap className="h-6 w-6 text-white" />
               </div>
+              <span className="text-foreground">Qurioza</span>
+            </Link>
+          </div>
+
+          {/* Main Content */}
+          <div className="space-y-8">
+            {/* Header */}
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+                Create your account
+              </h1>
+              <p className="mt-2 text-base text-muted-foreground">
+                Start your learning journey with Qurioza
+              </p>
             </div>
 
-            {/* Social Login */}
-            <div className="grid grid-cols-2 gap-3">
-              <Button
-                variant="outline"
-                className="w-full group relative overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-zinc-200/0 via-zinc-200/50 to-zinc-200/0 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-100%] group-hover:translate-x-[100%] duration-1000" />
-                <Github className="mr-2 h-4 w-4" />
-                Github
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full group relative overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-zinc-200/0 via-zinc-200/50 to-zinc-200/0 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-100%] group-hover:translate-x-[100%] duration-1000" />
-                <GoogleIcon className="mr-2 h-4 w-4" />
-                Google
-              </Button>
-            </div>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            {/* Register Form */}
-            <form className="space-y-3">
-              <div className="space-y-3">
-                <div className="grid gap-3 sm:grid-cols-2">
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-4">
+                {/* Name Fields */}
+                <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label
                       htmlFor="firstName"
-                      className="text-sm font-medium leading-none"
+                      className="text-sm font-medium text-foreground"
                     >
                       First name
                     </label>
-                    <div className="relative mt-1.5">
-                      <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <div className="mt-1.5 relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="firstName"
-                        placeholder="John"
-                        className="pl-9"
+                        autoComplete="given-name"
                         required
                         value={formData.firstName}
                         onChange={handleChange}
+                        placeholder="John"
+                        className="pl-9 h-11 bg-background border-input/60 hover:border-input focus:border-violet-600 transition-colors"
                       />
                     </div>
                   </div>
                   <div>
                     <label
                       htmlFor="lastName"
-                      className="text-sm font-medium leading-none"
+                      className="text-sm font-medium text-foreground"
                     >
                       Last name
                     </label>
-                    <div className="relative mt-1.5">
-                      <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <div className="mt-1.5 relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="lastName"
-                        placeholder="Doe"
-                        className="pl-9"
+                        autoComplete="family-name"
                         required
                         value={formData.lastName}
                         onChange={handleChange}
+                        placeholder="Doe"
+                        className="pl-9 h-11 bg-background border-input/60 hover:border-input focus:border-violet-600 transition-colors"
                       />
                     </div>
                   </div>
                 </div>
+
+                {/* Email Field */}
                 <div>
                   <label
                     htmlFor="email"
-                    className="text-sm font-medium leading-none"
+                    className="text-sm font-medium text-foreground"
                   >
-                    Email
+                    Email address
                   </label>
-                  <div className="relative mt-1.5">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <div className="mt-1.5 relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="email"
                       type="email"
-                      placeholder="name@example.com"
-                      className="pl-9"
+                      autoComplete="email"
                       required
                       value={formData.email}
                       onChange={handleChange}
+                      placeholder="name@example.com"
+                      className="pl-9 h-11 bg-background border-input/60 hover:border-input focus:border-violet-600 transition-colors"
                     />
                   </div>
                 </div>
+
+                {/* Password Field */}
                 <div>
                   <label
                     htmlFor="password"
-                    className="text-sm font-medium leading-none"
+                    className="text-sm font-medium text-foreground"
                   >
                     Password
                   </label>
-                  <div className="relative mt-1.5">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <div className="mt-1.5 relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="password"
                       type="password"
-                      placeholder="Create a password"
-                      className="pl-9"
+                      autoComplete="new-password"
                       required
                       value={formData.password}
                       onChange={handleChange}
+                      placeholder="Create a strong password"
+                      className="pl-9 h-11 bg-background border-input/60 hover:border-input focus:border-violet-600 transition-colors"
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="mt-2 text-sm text-muted-foreground">
                     Must be at least 8 characters long
                   </p>
                 </div>
               </div>
+
               <Button
                 type="submit"
-                className="w-full group"
-                onClick={handleSubmit}
+                disabled={loading}
+                className="w-full h-11 bg-violet-600 hover:bg-violet-700 text-white transition-colors"
               >
-                Create account
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="h-4 w-4 border-2 border-white/20 border-t-white animate-spin rounded-full" />
+                    Creating account...
+                  </span>
+                ) : (
+                  "Create account"
+                )}
               </Button>
             </form>
 
-            {/* Sign In Link */}
-            <div className="text-center space-y-2">
-              <div className="text-sm">
+            {/* Footer */}
+            <div className="space-y-4">
+              <p className="text-sm text-center text-muted-foreground">
                 Already have an account?{" "}
                 <Link
                   to="/auth/login"
-                  className="font-medium text-primary hover:text-primary/90"
+                  className="font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
                 >
                   Sign in
                 </Link>
-              </div>
-
-              {/* Terms */}
-              <p className="text-xs text-muted-foreground">
+              </p>
+              <p className="text-xs text-center text-muted-foreground">
                 By creating an account, you agree to our{" "}
                 <Link
                   to="/terms"
-                  className="underline underline-offset-4 hover:text-primary"
+                  className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
                 >
-                  Terms
+                  Terms of Service
                 </Link>{" "}
                 and{" "}
                 <Link
                   to="/privacy"
-                  className="underline underline-offset-4 hover:text-primary"
+                  className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
                 >
                   Privacy Policy
                 </Link>
-                .
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Panel - Illustration */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-violet-50/50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/20 dark:to-black/20" />
+
+        <div className="relative w-full flex flex-col items-center justify-center p-8">
+          {/* Illustration */}
+          <div className="w-full max-w-[640px] h-auto px-8">
+            <img
+              src={authIllustration}
+              alt="Learning Platform Interface"
+              className="w-full h-full object-contain drop-shadow-xl"
+            />
+          </div>
+
+          {/* Text Content */}
+          <div className="mt-12 text-center max-w-[440px] relative z-10">
+            <h2 className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-violet-500 dark:from-violet-400 dark:to-violet-300 mb-4">
+              Join Our Learning Community
+            </h2>
+            <p className="text-muted-foreground text-base leading-relaxed">
+              Create an account to access courses, track your progress, and
+              connect with other learners
+            </p>
           </div>
         </div>
       </div>

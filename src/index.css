@@ -29,6 +29,11 @@
         --input: 240 5.9% 90%;
         --ring: 240 5.9% 10%;
         --radius: 0.75rem;
+        --plyr-color-main: #8b5cf6;
+        --plyr-video-background: #000;
+        --plyr-menu-background: #202F36;
+        --plyr-menu-color: #E3E5E5;
+        --plyr-menu-border-color: #2A3F47;
     }
 
     /* Enable smooth scrolling globally */
@@ -36,6 +41,67 @@
         scroll-behavior: smooth;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Auth Pages Animations */
+    @keyframes blob {
+        0% {
+            transform: translate(0px, 0px) scale(1);
+        }
+
+        33% {
+            transform: translate(30px, -50px) scale(1.1);
+        }
+
+        66% {
+            transform: translate(-20px, 20px) scale(0.9);
+        }
+
+        100% {
+            transform: translate(0px, 0px) scale(1);
+        }
+    }
+
+    .animate-blob {
+        animation: blob 7s infinite;
+    }
+
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
+
+    /* Auth Form Styles */
+    .auth-input-icon {
+        @apply absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground;
+    }
+
+    .auth-input {
+        @apply pl-9 bg-background/50 border-muted focus:border-primary/50 focus:ring-primary/50;
+    }
+
+    .auth-button {
+        @apply bg-primary hover:bg-primary/90 text-primary-foreground transition-colors;
+    }
+
+    .auth-link {
+        @apply text-primary hover:underline transition-all;
+    }
+
+    /* Auth Background Effects */
+    .auth-blob {
+        @apply rounded-full mix-blend-multiply filter blur-xl opacity-70;
+    }
+
+    .auth-gradient {
+        @apply bg-gradient-to-b from-primary/5 to-primary/30;
+    }
+
+    .auth-grid {
+        @apply bg-grid-white/[0.02];
     }
 
     .dark {
@@ -173,4 +239,177 @@
     .theme-transition {
         @apply transition-colors duration-300;
     }
+
+    /* Dialog Styles */
+    .DialogContent {
+        max-height: 90vh !important;
+        padding: 0 !important;
+    }
+
+    /* Fix for Firefox */
+    @supports (-moz-appearance: none) {
+        .DialogContent {
+            max-height: 85vh !important;
+        }
+    }
+
+    /* Custom Scrollbar for Dialog Content */
+    .overflow-y-auto {
+        scrollbar-width: thin;
+        scrollbar-gutter: stable;
+    }
+
+    .overflow-y-auto::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .overflow-y-auto::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .overflow-y-auto::-webkit-scrollbar-thumb {
+        @apply bg-muted rounded-full;
+        border: 3px solid transparent;
+        background-clip: padding-box;
+    }
+
+    .dark .overflow-y-auto::-webkit-scrollbar-thumb {
+        @apply bg-[#2A3F47];
+    }
+
+    .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+        @apply bg-muted/80;
+    }
+
+    .dark .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+        @apply bg-[#344B54];
+    }
+
+    /* Dialog Header */
+    .DialogHeader {
+        @apply p-6 pb-4 border-b dark:border-[#2A3F47] !important;
+    }
+
+    /* Dialog Scrollable Content */
+    .dialog-scroll-content {
+        @apply flex-1 overflow-y-auto;
+        scrollbar-gutter: stable;
+    }
+
+    /* Dialog Tabs */
+    .dialog-tabs {
+        @apply flex-1 flex flex-col overflow-hidden;
+    }
+
+    .dialog-tabs-list {
+        @apply w-full justify-start border-b rounded-none px-0 h-auto sticky top-0 bg-background z-10;
+    }
+
+    .dialog-tab-trigger {
+        @apply flex items-center gap-2 px-4 py-2 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary dark:text-[#8B949E] dark:data-[state=active]:text-[#E3E5E5] dark:data-[state=active]:border-[#0B4F6C] hover:text-primary/80 dark:hover:text-[#E3E5E5] transition-colors;
+    }
+
+    .dialog-tab-content {
+        @apply mt-0 p-6;
+    }
+
+    /* Dialog Footer */
+    .dialog-footer {
+        @apply flex justify-end gap-2 p-6 border-t dark:border-[#2A3F47] sticky bottom-0 bg-background z-10 mt-auto;
+    }
+
+    /* Custom Scrollbar for Dialog */
+    .dialog-scroll-content::-webkit-scrollbar {
+        @apply w-2;
+    }
+
+    .dialog-scroll-content::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
+
+    .dialog-scroll-content::-webkit-scrollbar-thumb {
+        @apply bg-muted rounded-full border-4 border-solid border-transparent bg-clip-padding hover:bg-muted/80;
+    }
+
+    .dark .dialog-scroll-content::-webkit-scrollbar-thumb {
+        @apply bg-[#2A3F47] hover:bg-[#344B54];
+    }
+
+    /* Dialog Animations */
+    .dialog-content-enter {
+        @apply opacity-0 scale-95;
+    }
+
+    .dialog-content-enter-active {
+        @apply opacity-100 scale-100;
+        transition: opacity 200ms, transform 200ms;
+    }
+
+    .dialog-content-exit {
+        @apply opacity-100 scale-100;
+    }
+
+    .dialog-content-exit-active {
+        @apply opacity-0 scale-95;
+        transition: opacity 200ms, transform 200ms;
+    }
+
+    /* Dialog Responsive Styles */
+    @media (max-width: 640px) {
+        .DialogContent {
+            @apply h-[100dvh] max-h-[100dvh] rounded-none !important;
+        }
+
+        .dialog-footer {
+            @apply p-4;
+        }
+    }
+
+    /* Dialog Backdrop */
+    .DialogOverlay {
+        @apply bg-background/80 backdrop-blur-sm;
+    }
+}
+
+@layer components {
+    .dark .course-form-accordion {
+        @apply border-[#2A3F47];
+    }
+
+    .course-form-accordion .accordion-trigger {
+        @apply hover:bg-zinc-100 dark:hover:bg-[#2A3F47]/50 transition-colors;
+    }
+
+    .course-form-accordion .accordion-content {
+        @apply pb-4;
+    }
+}
+
+.plyr {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.plyr--video {
+    height: 100%;
+}
+
+.plyr__control--overlaid {
+    background: rgba(139, 92, 246, 0.8);
+}
+
+.plyr__control--overlaid:hover {
+    background: rgba(139, 92, 246, 0.9);
+}
+
+.plyr--full-ui input[type=range] {
+    color: #8b5cf6;
+}
+
+.plyr__control {
+    color: #8b5cf6;
+}
+
+.plyr__menu__container {
+    border-radius: 0.5rem;
 }

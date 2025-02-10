@@ -1,0 +1,96 @@
+.plyr__video-wrapper {
+    width: 100%;
+    height: 100%;
+    background: black;
+}
+
+.plyr__video-embed {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16/9;
+}
+
+.plyr {
+    --plyr-color-main: rgb(124 58 237);
+    --plyr-control-spacing: 12px;
+    --plyr-control-radius: 4px;
+    --plyr-video-controls-background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75));
+    --plyr-video-control-color: #fff;
+    --plyr-video-control-color-hover: rgb(124 58 237);
+    --plyr-audio-control-color-hover: rgb(124 58 237);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.plyr video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.plyr--video {
+    height: 100%;
+    aspect-ratio: 16/9;
+}
+
+.plyr--video .plyr__controls {
+    padding: var(--plyr-control-spacing);
+    background: var(--plyr-video-controls-background);
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.plyr--video:not(.plyr--hide-controls) .plyr__controls {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.plyr--video .plyr__control {
+    color: var(--plyr-video-control-color);
+}
+
+.plyr--video .plyr__control:hover {
+    background: var(--plyr-video-control-color-hover);
+    color: #fff;
+}
+
+.plyr--full-ui input[type=range] {
+    color: var(--plyr-color-main);
+}
+
+.plyr__control--overlaid {
+    background: var(--plyr-color-main);
+    color: #fff;
+    opacity: 0.9;
+}
+
+.plyr__control--overlaid:hover {
+    opacity: 1;
+}
+
+.plyr--playing .plyr__control--overlaid {
+    opacity: 0;
+}
+
+.plyr__menu__container {
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: var(--plyr-control-radius);
+    color: #fff;
+}
+
+.plyr__menu__container .plyr__control {
+    color: #fff;
+}
+
+.plyr__menu__container .plyr__control:hover {
+    background: var(--plyr-color-main);
+}
+
+.plyr-react.plyr-react--video {
+    width: 100%;
+    height: 100%;
+}

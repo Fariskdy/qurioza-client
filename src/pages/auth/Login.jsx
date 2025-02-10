@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GraduationCap, Mail, Lock, Github, ArrowRight } from "lucide-react";
-import { GoogleIcon } from "@/components/icons/GoogleIcon";
+import { GraduationCap, Mail, Lock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import authIllustration from "@/assets/illustrations/auth-illustration.svg";
 
 export function Login() {
   const navigate = useNavigate();
@@ -41,152 +41,152 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-background relative flex overflow-hidden">
-      {/* Background Design */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10" />
-      <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
-      <div className="absolute -left-20 top-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px] dark:from-violet-500/10 dark:to-purple-500/20" />
-      <div className="absolute -right-20 bottom-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px] dark:from-violet-500/10 dark:to-purple-500/20" />
+    <div className="min-h-screen bg-background flex">
+      {/* Left Panel - Form */}
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-background relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-b from-violet-50/50 via-background to-background dark:from-violet-950/20 dark:via-background dark:to-background" />
 
-      {/* Content */}
-      <div className="flex-1 flex items-center justify-center min-h-screen py-12 px-4 sm:px-6">
-        <div className="relative w-full max-w-[420px]">
-          <div className="rounded-2xl border bg-background/60 backdrop-blur-lg shadow-sm p-6 sm:p-8 space-y-6">
-            {/* Logo */}
-            <div className="text-center space-y-2">
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2.5 text-xl font-bold"
-              >
-                <div className="rounded-xl bg-gradient-to-tr from-primary/20 to-violet-400/20 p-1.5">
-                  <GraduationCap className="h-6 w-6 text-primary" />
-                </div>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary/90 to-violet-600">
-                  Qurioza
-                </span>
-              </Link>
-              <div className="space-y-1">
-                <h1 className="text-2xl font-semibold tracking-tight">
-                  Welcome back
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Enter your credentials to access your account
-                </p>
+        {/* Content */}
+        <div className="w-full max-w-[440px] relative">
+          {/* Logo Section */}
+          <div className="mb-16">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2.5 text-xl font-bold"
+            >
+              <div className="rounded-xl bg-violet-600 p-2 shadow-lg shadow-violet-500/20">
+                <GraduationCap className="h-6 w-6 text-white" />
               </div>
+              <span className="text-foreground">Qurioza</span>
+            </Link>
+          </div>
+
+          {/* Main Content */}
+          <div className="space-y-8">
+            {/* Header */}
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+                Welcome back
+              </h1>
+              <p className="mt-2 text-base text-muted-foreground">
+                Continue your learning journey where you left off
+              </p>
             </div>
 
-            {/* Social Login */}
-            <div className="grid grid-cols-2 gap-4">
-              <Button
-                variant="outline"
-                className="w-full group relative overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-zinc-200/0 via-zinc-200/50 to-zinc-200/0 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-100%] group-hover:translate-x-[100%] duration-1000" />
-                <Github className="mr-2 h-4 w-4" />
-                Github
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full group relative overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-zinc-200/0 via-zinc-200/50 to-zinc-200/0 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-100%] group-hover:translate-x-[100%] duration-1000" />
-                <GoogleIcon className="mr-2 h-4 w-4" />
-                Google
-              </Button>
-            </div>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-4">
                 <div>
                   <label
                     htmlFor="email"
-                    className="text-sm font-medium leading-none"
+                    className="text-sm font-medium text-foreground"
                   >
-                    Email
+                    Email address
                   </label>
-                  <div className="relative mt-2">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <div className="mt-1.5 relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="email"
                       type="email"
+                      autoComplete="email"
+                      required
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="name@example.com"
-                      className="pl-9"
-                      required
+                      className="pl-9 h-11 bg-background border-input/60 hover:border-input focus:border-violet-600 transition-colors"
                     />
                   </div>
                 </div>
+
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="text-sm font-medium leading-none"
-                  >
-                    Password
-                  </label>
-                  <div className="relative mt-2">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="password"
+                      className="text-sm font-medium text-foreground"
+                    >
+                      Password
+                    </label>
+                    <Link
+                      to="/auth/forgot-password"
+                      className="text-sm font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <div className="mt-1.5 relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="password"
                       type="password"
+                      autoComplete="current-password"
+                      required
                       value={formData.password}
                       onChange={handleChange}
                       placeholder="Enter your password"
-                      className="pl-9"
-                      required
+                      className="pl-9 h-11 bg-background border-input/60 hover:border-input focus:border-violet-600 transition-colors"
                     />
                   </div>
                 </div>
               </div>
-              <Button type="submit" className="w-full group" disabled={loading}>
-                {loading ? "Signing in..." : "Sign in"}
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full h-11 bg-violet-600 hover:bg-violet-700 text-white transition-colors"
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="h-4 w-4 border-2 border-white/20 border-t-white animate-spin rounded-full" />
+                    Signing in...
+                  </span>
+                ) : (
+                  "Sign in"
+                )}
               </Button>
             </form>
 
-            {/* Sign Up Link */}
-            <div className="text-center space-y-3">
-              <div className="text-sm">
-                Don't have an account?{" "}
-                <Link
-                  to="/auth/register"
-                  className="font-medium text-primary hover:text-primary/90"
-                >
-                  Sign up
-                </Link>
-              </div>
+            {/* Footer */}
+            <p className="text-sm text-center text-muted-foreground">
+              Don't have an account?{" "}
+              <Link
+                to="/auth/register"
+                className="font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
+              >
+                Create account
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
 
-              {/* Terms */}
-              <p className="text-xs text-muted-foreground">
-                By continuing, you agree to our{" "}
-                <Link
-                  to="/terms"
-                  className="underline underline-offset-4 hover:text-primary"
-                >
-                  Terms of Service
-                </Link>{" "}
-                and{" "}
-                <Link
-                  to="/privacy"
-                  className="underline underline-offset-4 hover:text-primary"
-                >
-                  Privacy Policy
-                </Link>
-                .
-              </p>
-            </div>
+      {/* Right Panel - Illustration */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-violet-50/50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/20 dark:to-black/20" />
+
+        <div className="relative w-full flex flex-col items-center justify-center p-8">
+          {/* Illustration */}
+          <div className="w-full max-w-[640px] h-auto px-8">
+            <img
+              src={authIllustration}
+              alt="Learning Platform Interface"
+              className="w-full h-full object-contain drop-shadow-xl"
+            />
+          </div>
+
+          {/* Text Content */}
+          <div className="mt-12 text-center max-w-[440px] relative z-10">
+            <h2 className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-violet-500 dark:from-violet-400 dark:to-violet-300 mb-4">
+              Start Your Learning Journey
+            </h2>
+            <p className="text-muted-foreground text-base leading-relaxed">
+              Join thousands of students and educators on our platform for an
+              enhanced learning experience
+            </p>
           </div>
         </div>
       </div>

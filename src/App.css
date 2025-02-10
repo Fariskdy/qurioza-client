@@ -1,0 +1,12 @@
+/* Add these styles to fix z-index issues with popover */
+.DialogOverlay {
+  z-index: 50;
+}
+
+.DialogContent {
+  z-index: 50;
+}
+
+[data-radix-popper-content-wrapper] {
+  z-index: 60 !important;
+}

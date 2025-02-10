@@ -13,58 +13,39 @@ import {
   MessageSquare,
   Check,
   Star,
+  BookOpen,
 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useSwipeable } from "react-swipeable";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Footer } from "@/components/Footer";
+import {
+  useFeaturedCourses,
+  usePopularCourses,
+  useStats,
+} from "@/api/courses/hooks";
 
 export function Home() {
   const [activeCard, setActiveCard] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-  const featuredCourses = [
-    {
-      title: "Full Stack Development",
-      description:
-        "Master both frontend and backend development with hands-on projects",
-      duration: "6 months",
-      level: "Intermediate",
-      image:
-        "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop",
-      badge: "Most Popular",
-    },
-    {
-      title: "AI & Machine Learning",
-      description: "Learn to build intelligent systems and neural networks",
-      duration: "4 months",
-      level: "Advanced",
-      image:
-        "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop",
-      badge: "New Course",
-    },
-    {
-      title: "Cloud Architecture",
-      description: "Master cloud platforms and distributed systems",
-      duration: "5 months",
-      level: "Intermediate",
-      image:
-        "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop",
-      badge: "High Demand",
-    },
-  ];
+  const { data: featuredCourses, isLoading: featuredLoading } =
+    useFeaturedCourses();
+  const { data: popularCourses, isLoading: popularLoading } =
+    usePopularCourses();
+  const { data: stats } = useStats();
 
   const handleNextCard = useCallback(() => {
     setActiveCard((prev) =>
-      prev === featuredCourses.length - 1 ? 0 : prev + 1
+      prev === featuredCourses?.length - 1 ? 0 : prev + 1
     );
-  }, []);
+  }, [featuredCourses]);
 
   const handlePrevCard = useCallback(() => {
     setActiveCard((prev) =>
-      prev === 0 ? featuredCourses.length - 1 : prev - 1
+      prev === 0 ? featuredCourses?.length - 1 : prev - 1
     );
-  }, []);
+  }, [featuredCourses]);
 
   // Auto-swipe functionality
   useEffect(() => {
@@ -106,8 +87,10 @@ export function Home() {
     }
   }, [activeCard, isAutoPlaying]);
 
+  const navigate = useNavigate();
+
   return (
-    <div>
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10">
         {/* Background Elements */}
@@ -165,19 +148,25 @@ export function Home() {
                 <div className="p-1.5 sm:p-2 rounded-full bg-violet-100 dark:bg-violet-900/50">
                   <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-violet-600" />
                 </div>
-                <span className="text-xs sm:text-sm">100K+ Students</span>
+                <span className="text-xs sm:text-sm">
+                  {stats?.totalStudents.toLocaleString()}+ Students
+                </span>
               </div>
               <div className="flex items-center gap-2.5 text-muted-foreground/90">
                 <div className="p-1.5 sm:p-2 rounded-full bg-amber-100 dark:bg-amber-900/50">
                   <Trophy className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-600" />
                 </div>
-                <span className="text-xs sm:text-sm">95% Success Rate</span>
+                <span className="text-xs sm:text-sm">
+                  {stats?.successRate}% Success Rate
+                </span>
               </div>
               <div className="flex items-center gap-2.5 text-muted-foreground/90">
                 <div className="p-1.5 sm:p-2 rounded-full bg-emerald-100 dark:bg-emerald-900/50">
                   <Timer className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-600" />
                 </div>
-                <span className="text-xs sm:text-sm">4.9/5 Rating</span>
+                <span className="text-xs sm:text-sm">
+                  {stats?.averageRating}/5 Rating
+                </span>
               </div>
             </div>
           </div>
@@ -190,74 +179,101 @@ export function Home() {
               <div className="absolute -left-32 bottom-12 w-[400px] h-[400px] bg-violet-500/10 rounded-full blur-[120px]" /> */}
 
               {/* Stacked Cards */}
-              <div
-                {...swipeHandlers}
-                className="relative h-[360px] sm:h-[400px] lg:h-[440px] mb-0 touch-pan-y cursor-grab active:cursor-grabbing perspective-1000"
-              >
-                {featuredCourses.map((course, index) => (
-                  <div
-                    key={index}
-                    className={`absolute left-0 right-0 transition-all duration-500 ${
-                      index === activeCard
-                        ? "opacity-100 translate-y-0 rotate-x-0 z-30"
-                        : index === activeCard - 1 ||
-                          (activeCard === 0 &&
-                            index === featuredCourses.length - 1)
-                        ? "opacity-60 translate-y-4 -rotate-x-6 z-20 scale-[0.93] blur-[1px]"
-                        : "opacity-30 translate-y-8 -rotate-x-12 z-10 scale-[0.86] blur-[2px]"
-                    }`}
-                  >
-                    <Card className="relative overflow-hidden border border-violet-500/10 bg-gradient-to-b from-white via-white to-violet-50/50 dark:from-zinc-900 dark:via-zinc-900 dark:to-violet-900/5 shadow-2xl hover:shadow-violet-500/10 transition-all group">
-                      <div className="relative">
-                        <img
-                          src={course.image}
-                          alt={course.title}
-                          className="w-full h-40 sm:h-44 lg:h-48 object-cover brightness-[1.02] group-hover:scale-[1.02] transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                        <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
-                          <Badge className="bg-white/95 text-violet-600 backdrop-blur-sm text-xs sm:text-sm shadow-sm">
-                            {course.badge}
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="p-4 sm:p-5 lg:p-6 bg-gradient-to-b from-transparent to-white/50 dark:to-zinc-900/50">
-                        <h3 className="text-lg sm:text-xl font-semibold mb-2 group-hover:text-violet-600 transition-colors">
-                          {course.title}
-                        </h3>
-                        <p className="text-muted-foreground text-xs sm:text-sm mb-4">
-                          {course.description}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3 sm:gap-4">
-                            <span className="text-xs sm:text-sm text-muted-foreground/90 font-medium">
-                              {course.duration}
-                            </span>
-                            <Badge
-                              variant="secondary"
-                              className="text-xs bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-300"
-                            >
-                              {course.level}
-                            </Badge>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-violet-600 text-xs sm:text-sm opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
-                          >
-                            Learn More
-                            <ArrowRight className="h-3 w-3 ml-1" />
-                          </Button>
-                        </div>
-                      </div>
-                    </Card>
+              {featuredLoading ? (
+                <div className="relative h-[360px] sm:h-[400px] lg:h-[440px]">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600"></div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ) : (
+                <div
+                  {...swipeHandlers}
+                  className="relative h-[360px] sm:h-[400px] lg:h-[440px] mb-0 touch-pan-y cursor-grab active:cursor-grabbing perspective-1000"
+                >
+                  {featuredCourses?.map((course, index) => (
+                    <div
+                      key={course._id}
+                      className={`absolute left-0 right-0 transition-all duration-500 ${
+                        index === activeCard
+                          ? "opacity-100 translate-y-0 rotate-x-0 z-30"
+                          : index === activeCard - 1 ||
+                            (activeCard === 0 &&
+                              index === featuredCourses.length - 1)
+                          ? "opacity-60 translate-y-4 -rotate-x-6 z-20 scale-[0.93] blur-[1px]"
+                          : "opacity-30 translate-y-8 -rotate-x-12 z-10 scale-[0.86] blur-[2px]"
+                      }`}
+                    >
+                      <Link to={`/courses/${course.slug}`}>
+                        <Card className="relative overflow-hidden border border-violet-500/10 bg-gradient-to-b from-white via-white to-violet-50/50 dark:from-zinc-900 dark:via-zinc-900 dark:to-violet-900/5 shadow-2xl hover:shadow-violet-500/10 transition-all group">
+                          <div className="relative">
+                            <img
+                              src={course.image}
+                              alt={course.title}
+                              className="w-full h-48 object-cover brightness-[1.02] group-hover:scale-[1.02] transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                            <div className="absolute top-4 left-4 flex gap-2">
+                              <Badge className="bg-white/95 text-violet-600 backdrop-blur-sm">
+                                {course.level}
+                              </Badge>
+                              {course.stats.enrolledStudents > 1000 && (
+                                <Badge className="bg-amber-500/90 text-white backdrop-blur-sm">
+                                  Bestseller
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          <div className="p-6 space-y-4">
+                            <div>
+                              <h3 className="text-xl font-semibold mb-2 group-hover:text-violet-600 transition-colors line-clamp-2">
+                                {course.title}
+                              </h3>
+                              <p className="text-muted-foreground text-sm line-clamp-2">
+                                {course.description}
+                              </p>
+                            </div>
+
+                            <div className="flex items-center gap-4 text-sm">
+                              <div className="flex items-center gap-1.5">
+                                <Timer className="h-4 w-4 text-violet-500" />
+                                <span>{course.duration} weeks</span>
+                              </div>
+                              <div className="flex items-center gap-1.5">
+                                <Users className="h-4 w-4 text-violet-500" />
+                                <span>
+                                  {course.stats.enrolledStudents.toLocaleString()}
+                                  + students
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-2">
+                              <div className="flex items-center gap-2">
+                                <div className="flex items-center">
+                                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                                  <span className="ml-1 font-medium">
+                                    {course.stats.rating.toFixed(1)}
+                                  </span>
+                                </div>
+                                <span className="text-muted-foreground">
+                                  ({course.stats.reviewCount} reviews)
+                                </span>
+                              </div>
+                              <div className="font-semibold text-lg">
+                                ₹{course.price}
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Navigation Dots */}
               <div className="flex justify-center gap-2 mt-4">
-                {featuredCourses.map((_, index) => (
+                {featuredCourses?.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => handleCardChange(index)}
@@ -356,126 +372,128 @@ export function Home() {
                 Most Popular Learning Paths
               </h2>
               <p className="text-lg text-muted-foreground">
-                Choose from our most sought-after courses and start your journey
-                today
+                Join thousands of students already learning with us
               </p>
             </div>
             <Button
               variant="outline"
-              className="border-primary/20 hover:bg-primary/5 h-10"
+              className="border-violet-200 dark:border-violet-800/50 hover:bg-violet-50 dark:hover:bg-violet-900/50"
+              onClick={() => navigate("/courses")}
             >
               Browse All Courses
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Web Development Bootcamp",
-                description:
-                  "Learn HTML, CSS, JavaScript, React, Node.js and more",
-                duration: "12 weeks",
-                level: "Beginner",
-                image:
-                  "https://images.unsplash.com/photo-1627398242454-45a1465c2479?q=80&w=2074&auto=format&fit=crop",
-                price: "$599",
-                tag: "Bestseller",
-                students: "15,000+",
-                rating: 4.9,
-              },
-              {
-                title: "Python for Data Science",
-                description:
-                  "Master Python, Pandas, NumPy, and Data Visualization",
-                duration: "8 weeks",
-                level: "Intermediate",
-                image:
-                  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
-                price: "$499",
-                tag: "Hot & New",
-                students: "8,500+",
-                rating: 4.8,
-              },
-              {
-                title: "AWS Cloud Practitioner",
-                description:
-                  "Get certified in Amazon Web Services fundamentals",
-                duration: "6 weeks",
-                level: "Beginner",
-                image:
-                  "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop",
-                price: "$399",
-                tag: "Trending",
-                students: "12,000+",
-                rating: 4.9,
-              },
-            ].map((course, index) => (
-              <Card
-                key={index}
-                className="group overflow-hidden border-border/50 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/5"
-              >
-                <div className="relative aspect-[16/9]">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/0 z-10" />
-                  <img
-                    src={course.image}
-                    alt={course.title}
-                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 right-4 z-20">
-                    <Badge className="bg-white/95 text-violet-600 shadow-sm font-medium">
-                      {course.tag}
-                    </Badge>
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4 z-20">
-                    <h3 className="text-lg font-semibold text-white mb-2">
-                      {course.title}
-                    </h3>
-                    <div className="flex items-center gap-3">
-                      <Badge
-                        variant="secondary"
-                        className="bg-black/30 text-white border-none"
-                      >
-                        {course.level}
-                      </Badge>
-                      <div className="flex items-center gap-1 text-white/90 text-sm">
-                        <Timer className="h-3.5 w-3.5" />
-                        {course.duration}
-                      </div>
+          {popularLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="animate-pulse h-[440px]">
+                  <div className="h-52 bg-zinc-200 dark:bg-zinc-800" />
+                  <div className="p-5 space-y-4">
+                    <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-3/4" />
+                    <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-1/2" />
+                    <div className="h-16 bg-zinc-200 dark:bg-zinc-800 rounded" />
+                    <div className="flex gap-4">
+                      <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-20" />
+                      <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-20" />
                     </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <p className="text-muted-foreground text-sm mb-6">
-                    {course.description}
-                  </p>
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">
-                          {course.students}
-                        </span>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {popularCourses?.courses.map((course) => (
+                <Link key={course._id} to={`/courses/${course.slug}`}>
+                  <Card className="group h-[440px] flex flex-col overflow-hidden hover:shadow-lg transition-all duration-300">
+                    {/* Image Section */}
+                    <div className="relative h-52">
+                      <img
+                        src={course.image}
+                        alt={course.title}
+                        className="w-full h-full object-cover"
+                      />
+                      {course.stats.enrolledStudents > 1000 && (
+                        <div className="absolute top-4 left-4">
+                          <Badge className="bg-amber-500 text-white">
+                            Bestseller
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content Section */}
+                    <div className="flex flex-col flex-grow p-5">
+                      {/* Course Info */}
+                      <div className="mb-2">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                          <Badge
+                            variant="secondary"
+                            className="bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400"
+                          >
+                            {course.level}
+                          </Badge>
+                          <span>•</span>
+                          <div className="flex items-center gap-1">
+                            <Timer className="h-4 w-4" />
+                            {course.duration} weeks
+                          </div>
+                        </div>
+                        <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-violet-600 transition-colors">
+                          {course.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+                          {course.description}
+                        </p>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 fill-violet-600 text-violet-600" />
-                        <span className="text-sm font-medium">
-                          {course.rating}
-                        </span>
+
+                      {/* Skills Section */}
+                      <div className="mb-4">
+                        <div className="flex flex-wrap gap-2">
+                          {course.features
+                            ?.slice(0, 3)
+                            .map((feature, index) => (
+                              <Badge
+                                key={index}
+                                variant="secondary"
+                                className="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                              >
+                                {feature}
+                              </Badge>
+                            ))}
+                        </div>
+                      </div>
+
+                      {/* Stats Section - Push to bottom with flex-grow */}
+                      <div className="mt-auto pt-4 border-t">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="flex items-center">
+                              <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                              <span className="ml-1 font-medium">
+                                {course.stats.rating.toFixed(1)}
+                              </span>
+                              <span className="text-sm text-muted-foreground ml-1">
+                                ({course.stats.reviewCount.toLocaleString()})
+                              </span>
+                            </div>
+                            <span className="text-sm text-muted-foreground">
+                              {course.stats.enrolledStudents.toLocaleString()}+
+                              students
+                            </span>
+                          </div>
+                          <div className="text-lg font-semibold text-violet-600">
+                            ₹{course.price}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <span className="text-lg font-semibold text-primary">
-                      {course.price}
-                    </span>
-                  </div>
-                  <Button className="w-full bg-violet-600/10 text-violet-600 hover:bg-violet-600/20 h-10">
-                    Enroll Now
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </div>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

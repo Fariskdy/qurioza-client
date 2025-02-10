@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
+import { api } from "@/api/axios";
 
 const AuthContext = createContext({});
 
@@ -9,45 +9,38 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Remove token handling from axios defaults
+  // Check auth status on mount and token refresh
   useEffect(() => {
-    axios.defaults.baseURL =
-      import.meta.env.VITE_API_URL || "http://localhost:3000";
-    axios.defaults.withCredentials = true; // Important for cookies
-  }, []);
+    const checkAuth = async () => {
+      try {
+        const response = await api.get("/auth/me");
+        setUser(response.data.user);
+      } catch (err) {
+        // Clear user state for any error
+        setUser(null);
+        // Don't redirect on initial auth check
+        if (err.response?.status === 401) {
+          console.log("User not authenticated");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Check auth status on mount
-  useEffect(() => {
     checkAuth();
   }, []);
-
-  const checkAuth = async () => {
-    try {
-      const response = await axios.get("/api/auth/me");
-      if (response.data.user) {
-        setUser(response.data.user);
-      }
-    } catch (err) {
-      console.error("Auth check failed:", err);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Modify login function
   const login = async (email, password) => {
     try {
       setError(null);
       setLoading(true);
-
-      const response = await axios.post("/api/auth/login", {
+      const { data } = await api.post("/auth/login", {
         email,
         password,
       });
-
-      setUser(response.data.user);
-      return response.data.user;
+      setUser(data.user);
+      return data.user;
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
       throw err;
@@ -59,7 +52,7 @@ export function AuthProvider({ children }) {
   // Modify logout function
   const logout = async () => {
     try {
-      await axios.post("/api/auth/logout");
+      await api.post("/auth/logout");
       setUser(null);
     } catch (err) {
       console.error("Logout error:", err);
@@ -70,9 +63,9 @@ export function AuthProvider({ children }) {
   const updateProfile = async (profileData) => {
     try {
       setError(null);
-      const response = await axios.put("/api/auth/profile", profileData);
-      setUser(response.data.user);
-      return response.data.user;
+      const { data } = await api.put("/auth/profile", profileData);
+      setUser(data.user);
+      return data.user;
     } catch (err) {
       setError(err.response?.data?.message || "Profile update failed");
       throw err;
@@ -83,7 +76,7 @@ export function AuthProvider({ children }) {
   const changePassword = async (currentPassword, newPassword) => {
     try {
       setError(null);
-      await axios.put("/api/auth/change-password", {
+      await api.put("/auth/change-password", {
         currentPassword,
         newPassword,
       });
@@ -97,7 +90,7 @@ export function AuthProvider({ children }) {
   const resetPassword = async (email) => {
     try {
       setError(null);
-      await axios.post("/api/auth/reset-password", { email });
+      await api.post("/api/auth/reset-password", { email });
     } catch (err) {
       setError(err.response?.data?.message || "Password reset failed");
       throw err;
@@ -108,7 +101,7 @@ export function AuthProvider({ children }) {
   const verifyEmail = async (token) => {
     try {
       setError(null);
-      await axios.post(`/api/auth/verify-email/${token}`);
+      await api.post(`/api/auth/verify-email/${token}`);
     } catch (err) {
       setError(err.response?.data?.message || "Email verification failed");
       throw err;

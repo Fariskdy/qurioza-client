@@ -1,4 +1,4 @@
-export function CoordinatorOverview() {
+function CoordinatorOverview() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Coordinator Dashboard</h1>
@@ -6,3 +6,5 @@ export function CoordinatorOverview() {
     </div>
   );
 }
+
+export default CoordinatorOverview;

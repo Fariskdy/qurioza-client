@@ -107,44 +107,63 @@ export const getNavigationConfig = (userRole) => {
         name: "Course Management",
         href: "/dashboard/courses",
         icon: BookOpen,
+        matchPaths: [
+          "/dashboard/courses",
+          "/dashboard/courses/:slug",
+          "/dashboard/courses/:slug/modules",
+          "/dashboard/courses/:slug/batches",
+          "/dashboard/courses/:slug/batches/:batchId",
+        ],
         children: [
           {
             name: "All Courses",
-            href: "/dashboard/courses/list",
-            icon: Layers,
+            href: "/dashboard/courses",
           },
           {
-            name: "Create Course",
-            href: "/dashboard/courses/create",
-            icon: FolderPlus,
+            name: "Active Courses",
+            href: "/dashboard/courses?status=published",
           },
           {
-            name: "Categories",
-            href: "/dashboard/courses/categories",
-            icon: BookMarked,
+            name: "Draft Courses",
+            href: "/dashboard/courses?status=draft",
           },
         ],
       },
       {
-        name: "Batch Management",
-        href: "/dashboard/batches",
-        icon: School,
+        name: "Teacher Management",
+        href: "/dashboard/teachers",
+        icon: Users,
         children: [
           {
-            name: "Active Batches",
-            href: "/dashboard/batches/active",
+            name: "All Teachers",
+            href: "/dashboard/teachers",
           },
           {
-            name: "Upcoming Batches",
-            href: "/dashboard/batches/upcoming",
-          },
-          {
-            name: "Completed Batches",
-            href: "/dashboard/batches/completed",
+            name: "Teacher Schedule",
+            href: "/dashboard/teachers/schedule",
           },
         ],
       },
-      // ... rest of coordinator navigation
+      {
+        name: "Analytics",
+        href: "/dashboard/analytics",
+        icon: BarChart2,
+        children: [
+          {
+            name: "Course Analytics",
+            href: "/dashboard/analytics/courses",
+          },
+          {
+            name: "Student Analytics",
+            href: "/dashboard/analytics/students",
+          },
+        ],
+      },
+      {
+        name: "Settings",
+        href: "/dashboard/settings",
+        icon: Settings,
+      },
     ],
 
     ADMIN: [
@@ -157,65 +176,21 @@ export const getNavigationConfig = (userRole) => {
         name: "Coordinator Management",
         href: "/dashboard/coordinators",
         icon: Users,
-        children: [
-          {
-            name: "All Coordinators",
-            href: "/dashboard/admin/coordinators/list",
-          },
-          {
-            name: "Add Coordinator",
-            href: "/dashboard/admin/coordinators/add",
-          },
-        ],
       },
       {
         name: "Category Management",
         href: "/dashboard/categories",
         icon: Layers,
-        children: [
-          {
-            name: "All Categories",
-            href: "/dashboard/admin/categories/list",
-          },
-          {
-            name: "Add Category",
-            href: "/dashboard/admin/categories/add",
-          },
-        ],
       },
       {
         name: "Analytics",
         href: "/dashboard/analytics",
         icon: BarChart2,
-        children: [
-          {
-            name: "User Statistics",
-            href: "/dashboard/analytics/users",
-          },
-          {
-            name: "Course Statistics",
-            href: "/dashboard/analytics/courses",
-          },
-          {
-            name: "Revenue Reports",
-            href: "/dashboard/analytics/revenue",
-          },
-        ],
       },
       {
         name: "Settings",
         href: "/dashboard/settings",
         icon: Settings,
-        children: [
-          {
-            name: "General",
-            href: "/dashboard/settings/general",
-          },
-          {
-            name: "System Settings",
-            href: "/dashboard/settings/system",
-          },
-        ],
       },
     ],
   };

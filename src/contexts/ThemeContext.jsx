@@ -12,11 +12,22 @@ export function ThemeProvider({ children }) {
   });
 
   useEffect(() => {
+    // Apply theme to dashboard layout
     const dashboardElement = document.getElementById("dashboard-layout");
     if (dashboardElement) {
       dashboardElement.classList.remove("light", "dark");
       dashboardElement.classList.add(theme);
     }
+
+    // Apply theme to portal root for dialogs
+    const portalRoot = document.getElementById("portal-root");
+    if (!portalRoot) {
+      const div = document.createElement("div");
+      div.id = "portal-root";
+      document.body.appendChild(div);
+    }
+    document.getElementById("portal-root").className = theme;
+
     localStorage.setItem("dashboard-theme", theme);
   }, [theme]);
 

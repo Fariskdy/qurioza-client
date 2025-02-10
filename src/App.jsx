@@ -1,4 +1,10 @@
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+  BrowserRouter,
+} from "react-router-dom";
 import { Home } from "@/pages/website/Home";
 import { Courses } from "@/pages/website/Courses";
 import { CourseDetails } from "@/pages/website/CourseDetails";
@@ -17,18 +23,29 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { DashboardLayout } from "./components/dashboard/DashboardLayout";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { LayoutProvider } from "@/contexts/LayoutContext";
+
+// Only import DevTools in development
+const ReactQueryDevtools = import.meta.env.DEV
+  ? (await import("@tanstack/react-query-devtools")).ReactQueryDevtools
+  : null;
 
 // New component for protected auth routes
 function AuthRoute({ children }) {
   const { user } = useAuth();
-
-  // If user is authenticated, redirect to dashboard
-  if (user) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
-  return children;
+  return user ? <Navigate to="/dashboard" replace /> : children;
 }
+
+// Create QueryClient instance
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 function App() {
   const location = useLocation();
@@ -36,67 +53,72 @@ function App() {
   const isDashboardPage = location.pathname.startsWith("/dashboard");
 
   return (
-    <AuthProvider>
-      <ScrollToTop />
-      {!isAuthPage && !isDashboardPage && <MainNav />}
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/faq" element={<FAQ />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/courses/:courseId" element={<CourseDetails />} />
+    <LayoutProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <ScrollToTop />
+          {!isAuthPage && !isDashboardPage && <MainNav />}
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/courses/:slug" element={<CourseDetails />} />
 
-        {/* Auth Routes - Wrap with AuthRoute */}
-        <Route
-          path="/auth/login"
-          element={
-            <AuthRoute>
-              <Login />
-            </AuthRoute>
-          }
-        />
-        <Route
-          path="/auth/register"
-          element={
-            <AuthRoute>
-              <Register />
-            </AuthRoute>
-          }
-        />
-        <Route
-          path="/auth/forgot-password"
-          element={
-            <AuthRoute>
-              <ForgotPassword />
-            </AuthRoute>
-          }
-        />
-        <Route
-          path="/auth/reset-password"
-          element={
-            <AuthRoute>
-              <ResetPassword />
-            </AuthRoute>
-          }
-        />
+            {/* Auth Routes */}
+            <Route
+              path="/auth/login"
+              element={
+                <AuthRoute>
+                  <Login />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path="/auth/register"
+              element={
+                <AuthRoute>
+                  <Register />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path="/auth/forgot-password"
+              element={
+                <AuthRoute>
+                  <ForgotPassword />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path="/auth/reset-password"
+              element={
+                <AuthRoute>
+                  <ResetPassword />
+                </AuthRoute>
+              }
+            />
 
-        {/* Dashboard Routes */}
-        <Route
-          path="/dashboard/*"
-          element={
-            <ProtectedRoute>
-              <ThemeProvider>
-                <DashboardLayout />
-              </ThemeProvider>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </AuthProvider>
+            {/* Dashboard Routes */}
+            <Route
+              path="/dashboard/*"
+              element={
+                <ProtectedRoute>
+                  <ThemeProvider>
+                    <DashboardLayout />
+                  </ThemeProvider>
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+          {/* {ReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />} */}
+        </AuthProvider>
+      </QueryClientProvider>
+    </LayoutProvider>
   );
 }
 
