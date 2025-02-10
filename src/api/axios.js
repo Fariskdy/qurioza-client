@@ -32,11 +32,17 @@ api.interceptors.response.use(
   }
 );
 
-// Response interceptor for handling errors
+// Modify the response interceptor to not redirect for public routes
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    // Don't show toast or redirect for public routes
+    const publicRoutes = ['/courses', '/courses/'];
+    const isPublicRoute = publicRoutes.some(route => 
+      originalRequest.url.startsWith(route)
+    );
 
     // Don't show toast for refresh token or auth check endpoints
     const isAuthEndpoint =
@@ -45,20 +51,20 @@ api.interceptors.response.use(
 
     // Handle 401 errors
     if (error.response?.status === 401 && !originalRequest._retry) {
-      if (!isAuthEndpoint) {
+      if (!isAuthEndpoint && !isPublicRoute) {
         originalRequest._retry = true;
         try {
           await api.post("/auth/refresh-token");
           return api(originalRequest);
         } catch (refreshError) {
-          if (!window.location.pathname.startsWith("/auth/")) {
+          if (!window.location.pathname.startsWith("/auth/") && !isPublicRoute) {
             window.location.href = "/auth/login";
           }
           return Promise.reject(refreshError);
         }
       }
-    } else if (!isAuthEndpoint) {
-      // Show toast for all other errors except auth endpoints
+    } else if (!isAuthEndpoint && !isPublicRoute) {
+      // Show toast for all other errors except auth endpoints and public routes
       showErrorToast(error);
     }
 
