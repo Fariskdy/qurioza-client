@@ -37,24 +37,24 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    const isAuthEndpoint = originalRequest.url.includes('/auth/');
+    const isAuthEndpoint = originalRequest.url.includes("/auth/");
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       try {
         originalRequest._retry = true;
-        await api.post('/auth/refresh-token');
+        await api.post("/auth/refresh-token");
         return api(originalRequest);
       } catch (refreshError) {
-        if (!window.location.pathname.startsWith('/auth/')) {
+        if (!window.location.pathname.startsWith("/auth/")) {
           // Add timeout to prevent race conditions
           setTimeout(() => {
-            window.location.href = '/auth/login';
+            window.location.href = "/auth/login";
           }, 100);
         }
         return Promise.reject(refreshError);
       }
     }
-    
+
     return Promise.reject(error);
   }
 );
