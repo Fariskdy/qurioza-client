@@ -32,24 +32,40 @@ api.interceptors.response.use(
   }
 );
 
-// Response interceptor for handling errors
+// Define protected routes that should trigger token refresh
+const protectedPaths = [
+  "/dashboard",
+  "/auth/me",
+  "/auth/profile",
+  "/auth/change-password",
+];
+
+const isProtectedRoute = (url) => {
+  return protectedPaths.some((path) => url.includes(path));
+};
+
+// Simplified response interceptor
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    const isAuthEndpoint = originalRequest.url.includes("/auth/");
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Only attempt refresh for protected routes
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      isProtectedRoute(originalRequest.url) &&
+      !originalRequest.url.includes("/auth/refresh-token")
+    ) {
+      originalRequest._retry = true;
+
       try {
-        originalRequest._retry = true;
         await api.post("/auth/refresh-token");
         return api(originalRequest);
       } catch (refreshError) {
-        if (!window.location.pathname.startsWith("/auth/")) {
-          // Add timeout to prevent race conditions
-          setTimeout(() => {
-            window.location.href = "/auth/login";
-          }, 100);
+        // Only redirect if on a protected route
+        if (isProtectedRoute(window.location.pathname)) {
+          window.location.href = "/auth/login";
         }
         return Promise.reject(refreshError);
       }

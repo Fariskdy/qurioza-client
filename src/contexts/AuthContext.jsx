@@ -9,19 +9,15 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Check auth status on mount and token refresh
+  // Only check auth status once on mount
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const response = await api.get("/auth/me");
         setUser(response.data.user);
       } catch (err) {
-        // Clear user state for any error
+        // Silently fail for public routes
         setUser(null);
-        // Don't redirect on initial auth check
-        if (err.response?.status === 401) {
-          console.log("User not authenticated");
-        }
       } finally {
         setLoading(false);
       }
@@ -30,32 +26,28 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, []);
 
+  // Simplified logout
+  const logout = async () => {
+    try {
+      await api.post("/auth/logout");
+      setUser(null);
+      // Force reload to clear any cached state
+      window.location.href = "/auth/login";
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+  };
+
   // Modify login function
   const login = async (email, password) => {
     try {
       setError(null);
-      setLoading(true);
-      const { data } = await api.post("/auth/login", {
-        email,
-        password,
-      });
+      const { data } = await api.post("/auth/login", { email, password });
       setUser(data.user);
       return data.user;
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
       throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Modify logout function
-  const logout = async () => {
-    try {
-      await api.post("/auth/logout");
-      setUser(null);
-    } catch (err) {
-      console.error("Logout error:", err);
     }
   };
 

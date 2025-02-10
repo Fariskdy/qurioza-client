@@ -25,6 +25,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { DashboardLayout } from "./components/dashboard/DashboardLayout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LayoutProvider } from "@/contexts/LayoutContext";
+import PropTypes from "prop-types";
 
 // Only import DevTools in development
 const ReactQueryDevtools = import.meta.env.DEV
@@ -36,6 +37,10 @@ function AuthRoute({ children }) {
   const { user } = useAuth();
   return user ? <Navigate to="/dashboard" replace /> : children;
 }
+
+AuthRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 // Create QueryClient instance
 const queryClient = new QueryClient({
@@ -59,7 +64,7 @@ function App() {
           <ScrollToTop />
           {!isAuthPage && !isDashboardPage && <MainNav />}
           <Routes>
-            {/* Public Routes */}
+            {/* Public Routes - No Auth Required */}
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -69,41 +74,25 @@ function App() {
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:slug" element={<CourseDetails />} />
 
-            {/* Auth Routes */}
+            {/* Auth Routes - Redirect if authenticated */}
             <Route
-              path="/auth/login"
+              path="/auth/*"
               element={
                 <AuthRoute>
-                  <Login />
-                </AuthRoute>
-              }
-            />
-            <Route
-              path="/auth/register"
-              element={
-                <AuthRoute>
-                  <Register />
-                </AuthRoute>
-              }
-            />
-            <Route
-              path="/auth/forgot-password"
-              element={
-                <AuthRoute>
-                  <ForgotPassword />
-                </AuthRoute>
-              }
-            />
-            <Route
-              path="/auth/reset-password"
-              element={
-                <AuthRoute>
-                  <ResetPassword />
+                  <Routes>
+                    <Route path="login" element={<Login />} />
+                    <Route path="register" element={<Register />} />
+                    <Route
+                      path="forgot-password"
+                      element={<ForgotPassword />}
+                    />
+                    <Route path="reset-password" element={<ResetPassword />} />
+                  </Routes>
                 </AuthRoute>
               }
             />
 
-            {/* Dashboard Routes */}
+            {/* Protected Routes - Require authentication */}
             <Route
               path="/dashboard/*"
               element={
