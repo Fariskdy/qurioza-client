@@ -6,38 +6,10 @@ import { defineConfig } from "vite";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [
-    react(),
-    {
-      name: 'handle-html5-routing',
-      enforce: 'post',
-      apply: 'build',
-      generateBundle(options, bundle) {
-        bundle['_redirects'] = {
-          type: 'asset',
-          fileName: '_redirects',
-          source: '/* /index.html 200'
-        };
-      },
-    },
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
-  },
-  server: {
-    port: 3000,
-  },
-  preview: {
-    port: process.env.PORT || 3000,
-    host: '0.0.0.0'
-  }
 });

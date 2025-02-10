@@ -53,74 +53,72 @@ function App() {
   const isDashboardPage = location.pathname.startsWith("/dashboard");
 
   return (
-    <BrowserRouter>
-      <LayoutProvider>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <ScrollToTop />
-            {!isAuthPage && !isDashboardPage && <MainNav />}
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/courses" element={<Courses />} />
-              <Route path="/courses/:slug" element={<CourseDetails />} />
+    <LayoutProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <ScrollToTop />
+          {!isAuthPage && !isDashboardPage && <MainNav />}
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/courses/:slug" element={<CourseDetails />} />
 
-              {/* Auth Routes */}
-              <Route
-                path="/auth/login"
-                element={
-                  <AuthRoute>
-                    <Login />
-                  </AuthRoute>
-                }
-              />
-              <Route
-                path="/auth/register"
-                element={
-                  <AuthRoute>
-                    <Register />
-                  </AuthRoute>
-                }
-              />
-              <Route
-                path="/auth/forgot-password"
-                element={
-                  <AuthRoute>
-                    <ForgotPassword />
-                  </AuthRoute>
-                }
-              />
-              <Route
-                path="/auth/reset-password"
-                element={
-                  <AuthRoute>
-                    <ResetPassword />
-                  </AuthRoute>
-                }
-              />
+            {/* Auth Routes */}
+            <Route
+              path="/auth/login"
+              element={
+                <AuthRoute>
+                  <Login />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path="/auth/register"
+              element={
+                <AuthRoute>
+                  <Register />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path="/auth/forgot-password"
+              element={
+                <AuthRoute>
+                  <ForgotPassword />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path="/auth/reset-password"
+              element={
+                <AuthRoute>
+                  <ResetPassword />
+                </AuthRoute>
+              }
+            />
 
-              {/* Dashboard Routes */}
-              <Route
-                path="/dashboard/*"
-                element={
-                  <ProtectedRoute>
-                    <ThemeProvider>
-                      <DashboardLayout />
-                    </ThemeProvider>
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-            {/* {ReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />} */}
-          </AuthProvider>
-        </QueryClientProvider>
-      </LayoutProvider>
-    </BrowserRouter>
+            {/* Dashboard Routes */}
+            <Route
+              path="/dashboard/*"
+              element={
+                <ProtectedRoute>
+                  <ThemeProvider>
+                    <DashboardLayout />
+                  </ThemeProvider>
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+          {/* {ReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />} */}
+        </AuthProvider>
+      </QueryClientProvider>
+    </LayoutProvider>
   );
 }
 
