@@ -164,9 +164,10 @@ export function ModernVideoPlayer({
       <div
         ref={containerRef}
         className={cn(
-          "group relative aspect-video bg-black overflow-hidden",
+          "group relative aspect-video bg-black overflow-hidden cursor-pointer",
           className
         )}
+        onClick={handlePlayPause}
       >
         <ReactPlayer
           ref={playerRef}
@@ -193,6 +194,24 @@ export function ModernVideoPlayer({
             <Loader2 className="w-12 h-12 animate-spin text-white/90" />
           </div>
         )}
+
+        {/* Center Play/Pause Button */}
+        <div
+          className={cn(
+            "absolute inset-0 flex items-center justify-center z-10",
+            "transition-opacity duration-300",
+            playing && !controlsVisible ? "opacity-0" : "opacity-100",
+            "group-hover:opacity-100"
+          )}
+        >
+          <div className="bg-black/50 rounded-full p-4 backdrop-blur-sm">
+            {playing ? (
+              <Pause className="w-12 h-12 text-white fill-white" />
+            ) : (
+              <Play className="w-12 h-12 text-white fill-white translate-x-0.5" />
+            )}
+          </div>
+        </div>
 
         {/* Video Controls */}
         <div
