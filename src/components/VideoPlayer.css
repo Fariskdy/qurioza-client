@@ -8,17 +8,18 @@
     position: relative;
     width: 100%;
     height: 100%;
-    aspect-ratio: 16/9;
 }
 
 .plyr {
-    --plyr-color-main: rgb(124 58 237);
+    --plyr-color-main: #ffffff;
     --plyr-control-spacing: 12px;
-    --plyr-control-radius: 4px;
+    --plyr-control-radius: 3px;
     --plyr-video-controls-background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75));
     --plyr-video-control-color: #fff;
-    --plyr-video-control-color-hover: rgb(124 58 237);
-    --plyr-audio-control-color-hover: rgb(124 58 237);
+    --plyr-video-control-color-hover: #fff;
+    --plyr-range-fill-background: #fff;
+    --plyr-range-thumb-background: #fff;
+    --plyr-range-thumb-shadow: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -34,14 +35,12 @@
 
 .plyr--video {
     height: 100%;
-    aspect-ratio: 16/9;
 }
 
 .plyr--video .plyr__controls {
-    padding: var(--plyr-control-spacing);
-    background: var(--plyr-video-controls-background);
-    opacity: 1;
-    transition: opacity 0.2s ease;
+    padding: 8px 12px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+    gap: 8px;
 }
 
 .plyr--video:not(.plyr--hide-controls) .plyr__controls {
@@ -50,26 +49,47 @@
 }
 
 .plyr--video .plyr__control {
-    color: var(--plyr-video-control-color);
+    transition: opacity 0.2s ease;
+    opacity: 0.85;
+    background: transparent;
 }
 
 .plyr--video .plyr__control:hover {
-    background: var(--plyr-video-control-color-hover);
-    color: #fff;
+    opacity: 1;
+    transform: none;
+    background: transparent;
 }
 
 .plyr--full-ui input[type=range] {
-    color: var(--plyr-color-main);
+    color: #fff;
 }
 
 .plyr__control--overlaid {
-    background: var(--plyr-color-main);
-    color: #fff;
-    opacity: 0.9;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    padding: 28px;
+    transition: all 0.2s ease !important;
+    transform: translate(-50%, -50%) !important;
 }
 
 .plyr__control--overlaid:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: translate(-50%, -50%) !important;
+}
+
+.plyr__control--overlaid svg {
+    width: 28px;
+    height: 28px;
+    fill: white;
+    opacity: 0.9;
+    transform: none !important;
+    transition: opacity 0.2s ease;
+}
+
+.plyr__control--overlaid:hover svg {
     opacity: 1;
+    transform: none !important;
 }
 
 .plyr--playing .plyr__control--overlaid {
@@ -77,20 +97,123 @@
 }
 
 .plyr__menu__container {
-    background: rgba(0, 0, 0, 0.9);
-    border-radius: var(--plyr-control-radius);
-    color: #fff;
+    background: rgba(28, 28, 28, 0.9);
+    border-radius: 3px;
+    padding: 4px;
 }
 
 .plyr__menu__container .plyr__control {
-    color: #fff;
+    padding: 8px 12px;
+    font-size: 13px;
 }
 
-.plyr__menu__container .plyr__control:hover {
-    background: var(--plyr-color-main);
+.plyr__menu__container .plyr__control--forward {
+    padding-right: 28px;
+}
+
+.plyr__menu__container [data-plyr='speed'] .plyr__control {
+    font-variant-numeric: tabular-nums;
+    padding: 6px 12px;
+}
+
+.plyr__menu__container [data-plyr='speed'] .plyr__control[aria-checked='true'] {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.plyr__tooltip {
+    background: rgba(28, 28, 28, 0.9);
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 2px;
+}
+
+.plyr--video .plyr__progress__container {
+    position: relative;
+    margin-bottom: 4px;
+}
+
+.plyr--video .plyr__progress input[type='range'] {
+    height: 4px;
+    transition: height 0.2s ease;
+}
+
+.plyr--video .plyr__progress__container:hover input[type='range'] {
+    height: 6px;
+}
+
+.plyr__preview-thumb {
+    background-color: rgba(28, 28, 28, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.plyr--video .plyr__progress__buffer {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.plyr--video .plyr__time {
+    font-size: 13px;
+    font-weight: 400;
+    opacity: 0.9;
+    padding: 0;
+    margin: 0 4px;
+}
+
+.plyr--video .plyr__volume {
+    max-width: 80px;
+    transition: max-width 0.2s ease;
+}
+
+.plyr--video .plyr__volume:hover {
+    max-width: 120px;
 }
 
 .plyr-react.plyr-react--video {
     width: 100%;
     height: 100%;
+}
+
+.plyr--video .plyr__controls button svg {
+    width: 16px;
+    height: 16px;
+}
+
+.plyr--video button[data-plyr='settings'] svg {
+    width: 14px;
+    height: 14px;
+}
+
+.plyr--video .plyr__controls {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.plyr--video:hover .plyr__controls,
+.plyr--video.plyr--paused .plyr__controls {
+    opacity: 1;
+}
+
+.plyr--video .plyr__volume input[type='range'] {
+    height: 4px;
+}
+
+.plyr--video .plyr__controls .plyr__controls__item {
+    margin-right: 4px;
+}
+
+.plyr--video .plyr__controls .plyr__controls__item:last-child {
+    margin-right: 0;
+}
+
+.plyr--video .plyr__controls::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+    pointer-events: none;
+    z-index: -1;
 }

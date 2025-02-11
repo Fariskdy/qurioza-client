@@ -1,10 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Plyr from "plyr-react";
 import "plyr-react/plyr.css";
 
 export function VideoPlayer({ src, poster, options = {} }) {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    console.log("VideoPlayer mounted with src:", src);
+    // Reset states when src changes
+    setError(false);
+    setIsLoading(true);
+  }, [src]);
+
+  const videoSource = {
+    type: "video",
+    sources: [
+      {
+        src,
+        type: options.mimeType || "video/mp4",
+      },
+    ],
+    poster,
+  };
 
   const defaultOptions = {
     controls: [
@@ -18,11 +36,7 @@ export function VideoPlayer({ src, poster, options = {} }) {
       "pip",
       "fullscreen",
     ],
-    settings: ["quality", "speed"],
-    quality: {
-      default: 1080,
-      options: [1080, 720, 480, 360],
-    },
+    settings: ["speed"],
     speed: {
       selected: 1,
       options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
@@ -37,25 +51,24 @@ export function VideoPlayer({ src, poster, options = {} }) {
     disableContextMenu: true,
   };
 
-  const videoSource = {
-    type: "video",
-    sources: [
-      {
-        src,
-        type: "video/mp4",
-      },
-    ],
-    poster,
-  };
-
-  const handleError = () => {
+  const handleError = (event) => {
+    console.error("Video player error:", event);
     setError(true);
     setIsLoading(false);
   };
 
-  const handleReady = () => {
+  const handleReady = (player) => {
+    console.log("Video player ready");
     setIsLoading(false);
   };
+
+  if (!src) {
+    return (
+      <div className="flex items-center justify-center h-full bg-zinc-900 text-white p-4 text-center">
+        <p>No video source provided</p>
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -66,10 +79,7 @@ export function VideoPlayer({ src, poster, options = {} }) {
   }
 
   return (
-    <div
-      className="plyr__video-embed relative"
-      onContextMenu={(e) => e.preventDefault()}
-    >
+    <div className="plyr__video-embed relative">
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>

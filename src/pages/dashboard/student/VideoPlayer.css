@@ -1,0 +1,110 @@
+/* Import the base styles */
+@import '@/components/VideoPlayer.css';
+
+/* Additional styles specific to the learn page */
+.plyr__video-wrapper {
+    background: black;
+    height: 100%;
+    width: 100%;
+}
+
+.plyr--video {
+    height: 100%;
+    width: 100%;
+}
+
+/* Custom time display */
+.plyr--video .plyr__time {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 0 4px;
+}
+
+/* Custom volume slider */
+.plyr--video .plyr__volume input[type='range'] {
+    color: white;
+}
+
+/* Custom loading animation */
+.video-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-center: center;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+}
+
+.video-loading::after {
+    content: '';
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(124, 58, 237, 0.3);
+    border-top-color: rgb(124, 58, 237);
+    border-radius: 50%;
+    animation: video-loading 1s linear infinite;
+}
+
+/* Title overlay */
+.plyr__video-wrapper::before {
+    content: attr(data-title);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.plyr--paused .plyr__video-wrapper::before {
+    opacity: 1;
+}
+
+/* Hover states for controls */
+.plyr--video:hover .plyr__controls {
+    opacity: 1;
+}
+
+.plyr--video .plyr__controls {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Custom speed selector */
+.plyr__menu__container [data-plyr='speed'] .plyr__control {
+    font-variant-numeric: tabular-nums;
+}
+
+.plyr__menu__container [data-plyr='speed'] .plyr__control[aria-checked='true'] {
+    background: rgb(124, 58, 237);
+}
+
+/* Quality selector */
+.plyr__menu__container [data-plyr='quality'] .plyr__control {
+    font-weight: 500;
+}
+
+/* Forward/Backward 10s buttons */
+.plyr--video .plyr__controls button[data-plyr='rewind'],
+.plyr--video .plyr__controls button[data-plyr='fast-forward'] {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@keyframes video-loading {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

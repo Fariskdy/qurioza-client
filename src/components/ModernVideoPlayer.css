@@ -1,0 +1,182 @@
+.react-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.react-player video {
+    object-fit: contain;
+}
+
+/* Progress bar styling */
+.video-progress-slider .relative {
+    height: 4px !important;
+}
+
+.video-progress-slider:hover .relative {
+    height: 6px !important;
+    transition: height 0.2s ease;
+}
+
+.video-progress-slider .bg-primary {
+    background-color: rgb(124, 58, 237) !important;
+}
+
+.video-progress-slider:hover .bg-primary {
+    background-color: rgb(139, 92, 246) !important;
+}
+
+/* Thumb styling */
+.video-progress-slider [role="slider"] {
+    width: 12px;
+    height: 12px;
+    background-color: rgb(124, 58, 237);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.video-progress-slider:hover [role="slider"] {
+    opacity: 1;
+}
+
+/* Volume slider styling */
+.group\/volume .bg-primary {
+    background-color: white !important;
+}
+
+.group\/volume [role="slider"] {
+    width: 12px;
+    height: 12px;
+    background-color: white;
+}
+
+/* Loading animation */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading-pulse {
+    animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .video-controls button {
+        padding: 0.75rem;
+    }
+
+    .video-progress-slider .relative {
+        height: 3px !important;
+    }
+
+    .video-progress-slider:hover .relative {
+        height: 4px !important;
+    }
+}
+
+/* Hover states */
+.video-controls button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Dropdown menu styling */
+.video-dropdown-content {
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Time display */
+.time-display {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Tooltip styling */
+.video-tooltip {
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+    padding: 4px 8px;
+}
+
+/* Progress bar hover area */
+.group\/progress:hover .h-1 {
+    height: 0.25rem;
+    transition: height 0.2s ease;
+}
+
+/* Volume slider customization */
+.volume-slider [role="slider"] {
+    @apply h-4 w-4 border-2 border-[#A435F0] bg-white transition-colors;
+}
+
+.volume-slider .bg-primary {
+    @apply bg-[#A435F0];
+}
+
+.volume-slider:hover [role="slider"] {
+    @apply border-[#A435F0]/80;
+}
+
+/* Progress bar hover effect */
+.group\/progress:hover .bg-[#A435F0] {
+    @apply bg-[#8710ED];
+}
+
+/* Custom dropdown styling */
+.video-speed-dropdown {
+    @apply bg-neutral-900/95 border-neutral-800;
+}
+
+.video-speed-dropdown [role="menuitem"] {
+    @apply text-white hover:bg-white/10 transition-colors;
+}
+
+/* Update dropdown menu active state */
+.video-speed-dropdown [role="menuitem"][data-active] {
+    @apply text-[#A435F0];
+}
+
+/* Update the playback rate active color */
+.dropdown-menu-item[data-state="active"] {
+    @apply text-[#A435F0];
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .video-controls button {
+        @apply p-2;
+    }
+
+    .group\/progress:hover .h-1 {
+        height: 0.125rem;
+    }
+}
+
+/* Hover effect for controls */
+.group:hover .controls-overlay {
+    opacity: 1;
+}
+
+/* Control buttons hover effect */
+.control-button {
+    @apply hover:bg-white/10 rounded-sm p-1.5 transition-colors;
+}
+
+/* Progress bar loading indicator */
+.progress-loaded {
+    @apply absolute left-0 top-0 h-full bg-white/30 rounded-full transition-all;
+}
+
+/* Progress bar played indicator */
+.progress-played {
+    @apply absolute left-0 top-0 h-full bg-[#A435F0] rounded-full transition-all;
+}
