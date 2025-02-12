@@ -92,24 +92,24 @@ export function Courses() {
       {/* Header Section */}
       <section className="relative border-b overflow-hidden">
         {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10" />
-        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
-        <div className="absolute -left-20 top-0 h-[300px] w-[300px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px] dark:from-violet-500/10 dark:to-purple-500/20" />
-        <div className="absolute -right-20 bottom-0 h-[300px] w-[300px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px] dark:from-violet-500/10 dark:to-purple-500/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50" />
+        <div className="absolute inset-0 bg-grid-black/[0.02]" />
+        <div className="absolute -left-20 top-0 h-[300px] w-[300px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px]" />
+        <div className="absolute -right-20 bottom-0 h-[300px] w-[300px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px]" />
 
         <div className="container relative px-4 md:px-6 py-12 md:py-16">
           <div className="flex flex-col items-center text-center space-y-8">
             <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 dark:bg-violet-900/30 px-4 py-1.5 backdrop-blur-sm">
-                <Badge className="bg-violet-500/20 text-violet-700 dark:text-violet-300 hover:bg-violet-500/20">
+              <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 px-4 py-1.5 backdrop-blur-sm">
+                <Badge className="bg-violet-500/20 text-violet-700 hover:bg-violet-500/20">
                   <Sparkles className="h-3.5 w-3.5 mr-1" />
                   New Courses Added
                 </Badge>
               </div>
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-700 dark:from-white dark:to-zinc-200">
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-700">
                 Explore Our Courses
               </h1>
-              <p className="max-w-[600px] mx-auto text-zinc-500 text-lg dark:text-zinc-400">
+              <p className="max-w-[600px] mx-auto text-zinc-500 text-lg">
                 Choose from hundreds of courses and start your journey in tech
                 today.
               </p>
@@ -121,7 +121,7 @@ export function Courses() {
               <div className="relative flex items-center">
                 <Search className="absolute left-5 h-5 w-5 text-zinc-500" />
                 <Input
-                  className="w-full h-14 pl-12 pr-32 rounded-full bg-white/80 dark:bg-zinc-800/80 border-zinc-200/80 dark:border-zinc-700/80 backdrop-blur-sm text-lg"
+                  className="w-full h-14 pl-12 pr-32 rounded-full bg-white/80 border-zinc-200/80 backdrop-blur-sm text-lg"
                   placeholder="What do you want to learn?"
                   type="search"
                   value={searchTerm}
@@ -135,12 +135,12 @@ export function Courses() {
 
             {/* Popular Searches */}
             <div className="flex flex-wrap justify-center gap-2 text-sm">
-              <span className="text-zinc-500 dark:text-zinc-400">Popular:</span>
+              <span className="text-zinc-500">Popular:</span>
               {["React", "Python", "AWS", "Data Science", "AI"].map((term) => (
                 <Button
                   key={term}
                   variant="link"
-                  className="text-violet-600 dark:text-violet-400 h-auto p-0 hover:no-underline"
+                  className="text-violet-600 h-auto p-0 hover:no-underline"
                 >
                   {term}
                 </Button>
@@ -221,7 +221,7 @@ export function Courses() {
           <div className="text-center py-16 px-4">
             <div className="max-w-md mx-auto space-y-6">
               <div className="flex justify-center">
-                <div className="h-24 w-24 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center">
+                <div className="h-24 w-24 rounded-full bg-violet-100 flex items-center justify-center">
                   {selectedCategory === "all" ? (
                     <Search className="h-12 w-12 text-violet-500" />
                   ) : (
@@ -330,7 +330,7 @@ export function Courses() {
                                 className={`h-4 w-4 ${
                                   i < Math.floor(course.stats.rating)
                                     ? "fill-amber-400 text-amber-400"
-                                    : "fill-zinc-200 text-zinc-200 dark:fill-zinc-800 dark:text-zinc-800"
+                                    : "fill-zinc-200 text-zinc-200"
                                 }`}
                               />
                             ))}
@@ -340,11 +340,11 @@ export function Courses() {
                           </span>
                         </div>
                       </div>
-                      <span className="text-lg font-semibold text-violet-600 dark:text-violet-400">
+                      <span className="text-lg font-semibold text-violet-600">
                         ₹{course.price}
                       </span>
                     </div>
-                    <Button className="w-full bg-violet-50 hover:bg-violet-100 text-violet-600 dark:bg-violet-900/50 dark:hover:bg-violet-900 dark:text-violet-300 h-10 transition-colors">
+                    <Button className="w-full bg-violet-50 hover:bg-violet-100 text-violet-600 h-10 transition-colors">
                       Learn More
                       <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>

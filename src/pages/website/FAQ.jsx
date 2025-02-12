@@ -74,14 +74,14 @@ export function FAQ() {
       {/* Hero Section */}
       <section className="relative border-b overflow-hidden">
         {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10" />
-        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50" />
+        <div className="absolute inset-0 bg-grid-black/[0.02]" />
 
         <div className="container relative px-4 md:px-6 py-16 md:py-24">
           <div className="flex flex-col items-center text-center space-y-8 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 dark:bg-violet-900/30 px-4 py-1.5 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 px-4 py-1.5 backdrop-blur-sm">
               <HelpCircle className="h-4 w-4 text-violet-600" />
-              <span className="text-sm font-medium text-violet-600 dark:text-violet-400">
+              <span className="text-sm font-medium text-violet-600">
                 Frequently Asked Questions
               </span>
             </div>
@@ -148,14 +148,14 @@ export function FAQ() {
       </section>
 
       {/* Contact Support */}
-      <section className="border-t bg-zinc-50/50 dark:bg-zinc-900/50">
+      <section className="border-t bg-zinc-50/50">
         <div className="container px-4 md:px-6 py-12 md:py-16">
           <div className="text-center space-y-6 max-w-2xl mx-auto">
             <h2 className="text-2xl font-bold tracking-tight">
               Still have questions?
             </h2>
             <p className="text-lg text-muted-foreground">
-              Can't find the answer you're looking for? Please chat with our
+              Can&apos;t find the answer you&apos;re looking for? Please chat with our
               friendly support team.
             </p>
             <Button size="lg" className="bg-violet-600 hover:bg-violet-700">

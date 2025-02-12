@@ -135,17 +135,17 @@ export function CourseDetails() {
         <div className="space-y-2">
           <Button
             variant="outline"
-            className="w-full h-14 text-lg bg-green-50 hover:bg-green-100 border-green-200 text-green-700 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:border-green-800 dark:text-green-400"
+            className="w-full h-14 text-lg bg-green-50 hover:bg-green-100 border-green-200 text-green-700"
             onClick={() => navigate("/dashboard/courses")}
           >
-            <CheckCircle2 className="mr-2 h-5 w-5 text-green-500 dark:text-green-400" />
+            <CheckCircle2 className="mr-2 h-5 w-5 text-green-500" />
             Already Enrolled
           </Button>
           <p className="text-sm text-muted-foreground text-center">
             Batch {userEnrollment.batch.batchNumber} • {userEnrollment.status}
           </p>
           <p
-            className="text-sm text-violet-600 dark:text-violet-400 text-center hover:underline cursor-pointer"
+            className="text-sm text-violet-600 text-center hover:underline cursor-pointer"
             onClick={() => navigate("/dashboard/courses")}
           >
             Go to Course Dashboard
@@ -199,8 +199,8 @@ export function CourseDetails() {
 
         {/* Show enrollment error if any */}
         {enrollmentError && (
-          <div className="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-            <p className="text-sm text-red-600 dark:text-red-400 text-center">
+          <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+            <p className="text-sm text-red-600 text-center">
               {enrollmentError}
             </p>
           </div>
@@ -274,8 +274,8 @@ export function CourseDetails() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative border-b bg-gradient-to-b from-violet-50 to-white dark:from-violet-950/50 dark:to-background">
-        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+      <section className="relative border-b bg-gradient-to-b from-violet-50 to-white">
+        <div className="absolute inset-0 bg-grid-black/[0.02]" />
 
         {/* Main Content */}
         <div className="container relative px-4 md:px-6 py-8 md:py-12">
@@ -295,7 +295,7 @@ export function CourseDetails() {
               <div className="space-y-4 mb-6">
                 <div className="flex flex-wrap gap-2">
                   {course.stats.enrolledStudents > 1000 && (
-                    <Badge className="bg-violet-500/10 text-violet-600 dark:text-violet-400 hover:bg-violet-500/20">
+                    <Badge className="bg-violet-500/10 text-violet-600 hover:bg-violet-500/20">
                       Bestseller
                     </Badge>
                   )}
@@ -340,7 +340,7 @@ export function CourseDetails() {
               <div className="flex items-center gap-4 mb-6">
                 {course.coordinator && (
                   <>
-                    <div className="h-12 w-12 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center">
+                    <div className="h-12 w-12 rounded-full bg-violet-100 flex items-center justify-center">
                       <span className="font-medium text-violet-600 text-lg">
                         {course.coordinator.username[0].toUpperCase()}
                       </span>
@@ -349,7 +349,7 @@ export function CourseDetails() {
                       <p className="text-sm text-muted-foreground">
                         Created by
                       </p>
-                      <p className="font-medium text-violet-600 dark:text-violet-400">
+                      <p className="font-medium text-violet-600">
                         {course.coordinator.username}
                       </p>
                     </div>
@@ -362,15 +362,15 @@ export function CourseDetails() {
 
               {/* Quick Info Pills */}
               <div className="flex flex-wrap gap-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100">
                   <GraduationCap className="h-4 w-4" />
                   <span className="text-sm">{course.level}</span>
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100">
                   <Globe2 className="h-4 w-4" />
                   <span className="text-sm">{course.language}</span>
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100">
                   <Award className="h-4 w-4" />
                   <span className="text-sm">Certificate Included</span>
                 </div>
@@ -409,7 +409,7 @@ export function CourseDetails() {
                     </>
                   )
                 ) : (
-                  <div className="w-full h-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+                  <div className="w-full h-full bg-zinc-100 flex items-center justify-center">
                     <BookOpen className="h-12 w-12 text-zinc-400" />
                   </div>
                 )}
@@ -511,12 +511,12 @@ export function CourseDetails() {
                 <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="animate-pulse">
-                      <div className="h-12 bg-zinc-100 dark:bg-zinc-800 rounded-lg mb-2" />
+                      <div className="h-12 bg-zinc-100 rounded-lg mb-2" />
                       <div className="pl-12 space-y-2">
                         {[1, 2].map((j) => (
                           <div
                             key={j}
-                            className="h-8 bg-zinc-50 dark:bg-zinc-800/50 rounded"
+                            className="h-8 bg-zinc-50 rounded"
                           />
                         ))}
                       </div>
@@ -525,14 +525,14 @@ export function CourseDetails() {
                 </div>
               ) : modules?.length > 0 ? (
                 <div className="space-y-4">
-                  <div className="border rounded-xl divide-y dark:border-zinc-800">
+                  <div className="border rounded-xl divide-y">
                     {/* Show only first 3 modules or all if showAllModules is true */}
                     {modules
                       .slice(0, showAllModules ? undefined : 3)
                       .map((module, index) => (
                         <div key={module._id} className="divide-y">
                           {/* Module Header */}
-                          <div className="p-4 hover:bg-zinc-50 dark:hover:bg-zinc-900/50">
+                          <div className="p-4 hover:bg-zinc-50">
                             <div className="flex items-center justify-between">
                               <div className="space-y-1">
                                 <div className="flex items-center gap-2">
@@ -561,7 +561,7 @@ export function CourseDetails() {
 
                           {/* Module Content */}
                           {module.content && module.content.length > 0 && (
-                            <div className="bg-zinc-50/50 dark:bg-zinc-900/50 divide-y">
+                            <div className="bg-zinc-50/50 divide-y">
                               {module.content.map((content) => (
                                 <div
                                   key={content._id}
@@ -582,7 +582,7 @@ export function CourseDetails() {
                                       {content.isPreview && (
                                         <Badge
                                           variant="secondary"
-                                          className="ml-2 text-xs bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400"
+                                          className="ml-2 text-xs bg-violet-100 text-violet-600"
                                         >
                                           Preview
                                         </Badge>
@@ -606,7 +606,7 @@ export function CourseDetails() {
                   {modules.length > 3 && (
                     <Button
                       variant="outline"
-                      className="w-full gap-2 dark:border-zinc-800"
+                      className="w-full gap-2"
                       onClick={() => setShowAllModules(!showAllModules)}
                     >
                       {showAllModules ? (
@@ -645,7 +645,7 @@ export function CourseDetails() {
                   <h2 className="text-2xl font-semibold">Instructor</h2>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="h-16 w-16 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center">
+                  <div className="h-16 w-16 rounded-full bg-violet-100 flex items-center justify-center">
                     <span className="font-medium text-violet-600 text-xl">
                       {course.coordinator.username[0]}
                     </span>
@@ -713,7 +713,7 @@ export function CourseDetails() {
       </div>
 
       {/* CTA Section */}
-      <section className="border-t bg-zinc-50/50 dark:bg-zinc-900/50">
+      <section className="border-t bg-zinc-50/50">
         <div className="container px-4 md:px-6 py-12 md:py-16">
           {/* Related Courses - Only show if there are related courses */}
           {(relatedCoursesLoading || relatedCourses?.length > 0) && (
@@ -737,10 +737,10 @@ export function CourseDetails() {
                       key={i}
                       className="rounded-xl border bg-card animate-pulse"
                     >
-                      <div className="aspect-video bg-zinc-200 dark:bg-zinc-800 rounded-t-xl" />
+                      <div className="aspect-video bg-zinc-200 rounded-t-xl" />
                       <div className="p-4 space-y-3">
-                        <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-3/4" />
-                        <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-1/2" />
+                        <div className="h-4 bg-zinc-200 rounded w-3/4" />
+                        <div className="h-4 bg-zinc-200 rounded w-1/2" />
                       </div>
                     </div>
                   ))}

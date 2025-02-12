@@ -18,16 +18,16 @@ export function About() {
       {/* Hero Section */}
       <section className="relative border-b overflow-hidden">
         {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10" />
-        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
-        <div className="absolute -left-20 top-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px] dark:from-violet-500/10 dark:to-purple-500/20" />
-        <div className="absolute -right-20 bottom-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px] dark:from-violet-500/10 dark:to-purple-500/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50" />
+        <div className="absolute inset-0 bg-grid-black/[0.02]" />
+        <div className="absolute -left-20 top-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px]" />
+        <div className="absolute -right-20 bottom-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px]" />
 
         <div className="container relative px-4 md:px-6 py-20 md:py-28">
           <div className="flex flex-col items-center text-center space-y-8 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 dark:bg-violet-900/30 px-4 py-1.5 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 px-4 py-1.5 backdrop-blur-sm">
               <Sparkles className="h-4 w-4 text-violet-600" />
-              <span className="text-sm font-medium text-violet-600 dark:text-violet-400">
+              <span className="text-sm font-medium text-violet-600">
                 Transforming Tech Education
               </span>
             </div>
@@ -41,8 +41,8 @@ export function About() {
               </span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl">
-              We're on a mission to provide world-class technology education
-              that's accessible, affordable, and focused on real-world skills.
+              We&apos;re on a mission to provide world-class technology education
+              that&apos;s accessible, affordable, and focused on real-world skills.
             </p>
           </div>
         </div>
@@ -67,7 +67,7 @@ export function About() {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
               <div className="relative space-y-2 text-center">
-                <div className="mx-auto w-12 h-12 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="mx-auto w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Icon className="w-6 h-6 text-violet-600" />
                 </div>
                 <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-violet-400">
@@ -82,15 +82,15 @@ export function About() {
 
       {/* Mission Section */}
       <section className="relative border-y overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10" />
-        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50" />
+        <div className="absolute inset-0 bg-grid-black/[0.02]" />
 
         <div className="container relative px-4 md:px-6 py-12 md:py-20">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 dark:bg-violet-900/30 px-4 py-1.5 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 px-4 py-1.5 backdrop-blur-sm">
                 <Target className="h-4 w-4 text-violet-600" />
-                <span className="text-sm font-medium text-violet-600 dark:text-violet-400">
+                <span className="text-sm font-medium text-violet-600">
                   Our Mission
                 </span>
               </div>
@@ -112,9 +112,9 @@ export function About() {
                 ].map((item) => (
                   <div
                     key={item}
-                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-colors"
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-violet-50 transition-colors"
                   >
-                    <div className="rounded-full bg-emerald-100 dark:bg-emerald-900/30 p-1">
+                    <div className="rounded-full bg-emerald-100 p-1">
                       <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     </div>
                     <span>{item}</span>
@@ -154,9 +154,9 @@ export function About() {
       {/* Values Section */}
       <section className="container px-4 md:px-6 py-12 md:py-20">
         <div className="text-center space-y-4 mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 dark:bg-violet-900/30 px-4 py-1.5 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 px-4 py-1.5 backdrop-blur-sm">
             <Award className="h-4 w-4 text-violet-600" />
-            <span className="text-sm font-medium text-violet-600 dark:text-violet-400">
+            <span className="text-sm font-medium text-violet-600">
               Our Values
             </span>
           </div>
@@ -195,7 +195,7 @@ export function About() {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
               <div className="relative">
-                <div className="w-12 h-12 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Icon className="w-6 h-6 text-violet-600" />
                 </div>
                 <h3 className="text-xl font-semibold mt-4">{title}</h3>
@@ -208,14 +208,14 @@ export function About() {
 
       {/* CTA Section */}
       <section className="relative border-t overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10" />
-        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50" />
+        <div className="absolute inset-0 bg-grid-black/[0.02]" />
 
         <div className="container relative px-4 md:px-6 py-12 md:py-20">
           <div className="text-center space-y-6 max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 dark:bg-violet-900/30 px-4 py-1.5 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 px-4 py-1.5 backdrop-blur-sm">
               <Sparkles className="h-4 w-4 text-violet-600" />
-              <span className="text-sm font-medium text-violet-600 dark:text-violet-400">
+              <span className="text-sm font-medium text-violet-600">
                 Join Our Community
               </span>
             </div>

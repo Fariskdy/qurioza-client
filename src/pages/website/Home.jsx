@@ -92,19 +92,19 @@ export function Home() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10">
+      <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden bg-gradient-to-br from-violet-50 via-white to-purple-50/50">
         {/* Background Elements */}
-        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] -mt-16" />
+        <div className="absolute inset-0 bg-grid-black/[0.02] -mt-16" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-[800px] w-[800px] rotate-45 rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[120px] dark:from-violet-500/10 dark:to-purple-500/20" />
+          <div className="h-[800px] w-[800px] rotate-45 rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[120px]" />
         </div>
 
         {/* Content */}
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between gap-8 sm:gap-12 lg:gap-16 z-10">
           {/* Left Column - Text Content */}
           <div className="flex-1 max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-100/80 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400 hover:bg-violet-100/80">
-              <Badge className="bg-violet-100/80 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400 hover:bg-violet-100/80">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-100/80 text-violet-600 hover:bg-violet-100/80">
+              <Badge className="bg-violet-100/80 text-violet-600 hover:bg-violet-100/80">
                 <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />
                 New: AI Development Course
               </Badge>
@@ -145,7 +145,7 @@ export function Home() {
 
             <div className="flex items-center justify-center lg:justify-start gap-8 text-sm">
               <div className="flex items-center gap-2.5 text-muted-foreground/90">
-                <div className="p-1.5 sm:p-2 rounded-full bg-violet-100 dark:bg-violet-900/50">
+                <div className="p-1.5 sm:p-2 rounded-full bg-violet-100">
                   <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-violet-600" />
                 </div>
                 <span className="text-xs sm:text-sm">
@@ -153,7 +153,7 @@ export function Home() {
                 </span>
               </div>
               <div className="flex items-center gap-2.5 text-muted-foreground/90">
-                <div className="p-1.5 sm:p-2 rounded-full bg-amber-100 dark:bg-amber-900/50">
+                <div className="p-1.5 sm:p-2 rounded-full bg-amber-100">
                   <Trophy className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-600" />
                 </div>
                 <span className="text-xs sm:text-sm">
@@ -161,7 +161,7 @@ export function Home() {
                 </span>
               </div>
               <div className="flex items-center gap-2.5 text-muted-foreground/90">
-                <div className="p-1.5 sm:p-2 rounded-full bg-emerald-100 dark:bg-emerald-900/50">
+                <div className="p-1.5 sm:p-2 rounded-full bg-emerald-100">
                   <Timer className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-600" />
                 </div>
                 <span className="text-xs sm:text-sm">
@@ -204,7 +204,7 @@ export function Home() {
                       }`}
                     >
                       <Link to={`/courses/${course.slug}`}>
-                        <Card className="relative overflow-hidden border border-violet-500/10 bg-gradient-to-b from-white via-white to-violet-50/50 dark:from-zinc-900 dark:via-zinc-900 dark:to-violet-900/5 shadow-2xl hover:shadow-violet-500/10 transition-all group">
+                        <Card className="relative overflow-hidden border border-violet-500/10 bg-gradient-to-b from-white via-white to-violet-50/50 shadow-2xl hover:shadow-violet-500/10 transition-all group">
                           <div className="relative">
                             <img
                               src={course.image}
@@ -280,7 +280,7 @@ export function Home() {
                     className={`w-2 h-2 rounded-full transition-all ring-1 ring-violet-500/20 ${
                       index === activeCard
                         ? "bg-violet-600 w-8 ring-violet-500/50"
-                        : "bg-violet-100 hover:bg-violet-200 dark:bg-violet-800/50 dark:hover:bg-violet-700/50"
+                        : "bg-violet-100 hover:bg-violet-200"
                     }`}
                     aria-label={`View course ${index + 1}`}
                   />
@@ -292,7 +292,7 @@ export function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10">
+      <section className="py-20 bg-gradient-to-br from-violet-50 via-white to-purple-50/50">
         <div className="container px-4 md:px-6">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl font-bold tracking-tight mb-4">
@@ -349,7 +349,7 @@ export function Home() {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                 <div className="relative">
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-violet-100 dark:bg-violet-900/50">
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-violet-100">
                     <Icon className="h-6 w-6 text-violet-600" />
                   </div>
                   <h3 className="text-xl font-semibold mb-2 group-hover:text-violet-600 transition-colors">
@@ -377,7 +377,7 @@ export function Home() {
             </div>
             <Button
               variant="outline"
-              className="border-violet-200 dark:border-violet-800/50 hover:bg-violet-50 dark:hover:bg-violet-900/50"
+              className="border-violet-200 hover:bg-violet-50"
               onClick={() => navigate("/courses")}
             >
               Browse All Courses
@@ -389,14 +389,14 @@ export function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3].map((i) => (
                 <Card key={i} className="animate-pulse h-[440px]">
-                  <div className="h-52 bg-zinc-200 dark:bg-zinc-800" />
+                  <div className="h-52 bg-zinc-200" />
                   <div className="p-5 space-y-4">
-                    <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-3/4" />
-                    <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-1/2" />
-                    <div className="h-16 bg-zinc-200 dark:bg-zinc-800 rounded" />
+                    <div className="h-4 bg-zinc-200 rounded w-3/4" />
+                    <div className="h-4 bg-zinc-200 rounded w-1/2" />
+                    <div className="h-16 bg-zinc-200 rounded" />
                     <div className="flex gap-4">
-                      <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-20" />
-                      <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-20" />
+                      <div className="h-4 bg-zinc-200 rounded w-20" />
+                      <div className="h-4 bg-zinc-200 rounded w-20" />
                     </div>
                   </div>
                 </Card>
@@ -430,7 +430,7 @@ export function Home() {
                         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                           <Badge
                             variant="secondary"
-                            className="bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400"
+                            className="bg-violet-100 text-violet-600"
                           >
                             {course.level}
                           </Badge>
@@ -457,7 +457,7 @@ export function Home() {
                               <Badge
                                 key={index}
                                 variant="secondary"
-                                className="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                                className="bg-zinc-100 text-zinc-600"
                               >
                                 {feature}
                               </Badge>
@@ -498,7 +498,7 @@ export function Home() {
       </section>
 
       {/* Student Success Section */}
-      <section className="py-20 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10">
+      <section className="py-20 bg-gradient-to-br from-violet-50 via-white to-purple-50/50">
         <div className="container px-4 md:px-6">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl font-bold tracking-tight mb-4">
@@ -566,7 +566,7 @@ export function Home() {
                 <div className="flex items-center gap-2 text-sm">
                   <Badge
                     variant="secondary"
-                    className="bg-violet-100/80 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400 hover:bg-violet-100/80"
+                    className="bg-violet-100/80 text-violet-600 hover:bg-violet-100/80"
                   >
                     {testimonial.course}
                   </Badge>
@@ -616,14 +616,14 @@ export function Home() {
       {/* CTA Section */}
       <section className="relative py-24 overflow-hidden">
         {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10" />
-        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px] dark:from-violet-500/10 dark:to-purple-500/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50" />
+        <div className="absolute inset-0 bg-grid-black/[0.02]" />
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/30 blur-[100px]" />
 
         <div className="relative container px-4 md:px-6">
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 dark:bg-violet-900/30 px-4 py-1.5 mb-8 backdrop-blur-sm">
-              <Badge className="bg-violet-100/80 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400 hover:bg-violet-100/80">
+            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 px-4 py-1.5 mb-8 backdrop-blur-sm">
+              <Badge className="bg-violet-100/80 text-violet-600 hover:bg-violet-100/80">
                 Limited Time Offer
               </Badge>
             </div>
@@ -649,7 +649,7 @@ export function Home() {
               <Button
                 variant="outline"
                 size="lg"
-                className="h-12 px-8 border-violet-200 dark:border-violet-800/50 hover:bg-violet-50 dark:hover:bg-violet-900/50"
+                className="h-12 px-8 border-violet-200 hover:bg-violet-50"
               >
                 View Pricing
               </Button>

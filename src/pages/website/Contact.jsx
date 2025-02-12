@@ -9,14 +9,14 @@ export function Contact() {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative border-b overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50 dark:from-violet-950 dark:via-zinc-900 dark:to-purple-900/10" />
-        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-purple-50/50" />
+        <div className="absolute inset-0 bg-grid-black/[0.02] " />
 
         <div className="container relative px-4 md:px-6 py-16">
           <div className="flex flex-col items-center text-center space-y-4 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80 dark:bg-violet-900/30 px-4 py-1.5 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100/80  px-4 py-1.5 backdrop-blur-sm">
               <MessageSquare className="h-4 w-4 text-violet-600" />
-              <span className="text-sm font-medium text-violet-600 dark:text-violet-400">
+              <span className="text-sm font-medium text-violet-600">
                 24/7 Support Available
               </span>
             </div>
@@ -109,7 +109,7 @@ export function Contact() {
                   },
                 ].map(({ icon: Icon, title, details }) => (
                   <div key={title} className="flex gap-4">
-                    <div className="w-12 h-12 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center shrink-0">
                       <Icon className="w-6 h-6 text-violet-600" />
                     </div>
                     <div className="space-y-2">
