@@ -37,6 +37,7 @@ export function ModernVideoPlayer({
   title,
   onReady,
   onError,
+  onEnded,
   className,
 }) {
   const [playing, setPlaying] = useState(false);
@@ -163,23 +164,27 @@ export function ModernVideoPlayer({
     <TooltipProvider>
       <div
         ref={containerRef}
-        className={cn(
-          "group relative aspect-video bg-black overflow-hidden cursor-pointer",
-          className
-        )}
-        onClick={handlePlayPause}
+        className="group relative h-full w-full bg-black overflow-hidden cursor-pointer"
       >
         <ReactPlayer
           ref={playerRef}
           url={src}
           width="100%"
           height="100%"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
           playing={playing}
           volume={volume}
           muted={muted}
           playbackRate={playbackRate}
           onReady={onReady}
           onError={onError}
+          onEnded={onEnded}
           onProgress={handleProgress}
           onDuration={setDuration}
           onBuffer={handleBuffer}
@@ -188,18 +193,19 @@ export function ModernVideoPlayer({
           className="react-player"
         />
 
-        {/* Loading Overlay */}
-        {isBuffering && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-20">
-            <Loader2 className="w-12 h-12 animate-spin text-white/90" />
-          </div>
-        )}
+        {/* Click area for play/pause - covers only the video area */}
+        <div className="absolute inset-0 z-20" onClick={handlePlayPause} />
 
         {/* Center Play/Pause Button */}
-        <div
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handlePlayPause();
+          }}
           className={cn(
-            "absolute inset-0 flex items-center justify-center z-10",
-            "transition-opacity duration-300",
+            "absolute inset-0 flex items-center justify-center",
+            "transition-opacity duration-300 z-30",
+            "hover:scale-110 transform",
             playing && !controlsVisible ? "opacity-0" : "opacity-100",
             "group-hover:opacity-100"
           )}
@@ -211,7 +217,14 @@ export function ModernVideoPlayer({
               <Play className="w-12 h-12 text-white fill-white translate-x-0.5" />
             )}
           </div>
-        </div>
+        </button>
+
+        {/* Loading Overlay */}
+        {isBuffering && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-40">
+            <Loader2 className="w-12 h-12 animate-spin text-white/90" />
+          </div>
+        )}
 
         {/* Video Controls */}
         <div
@@ -219,12 +232,16 @@ export function ModernVideoPlayer({
             "absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent",
             "transition-opacity duration-300",
             controlsVisible ? "opacity-100" : "opacity-0",
-            "z-20 pb-2"
+            "z-30 pb-2"
           )}
+          onClick={(e) => e.stopPropagation()}
         >
           {/* Progress Bar */}
           <div className="px-4">
-            <div className="relative group/progress">
+            <div
+              className="relative group/progress"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="absolute -top-3 left-0 right-0 h-8 bg-transparent" />
               <div className="relative h-1 bg-white/30 rounded-full overflow-hidden">
                 <div
@@ -251,7 +268,10 @@ export function ModernVideoPlayer({
           </div>
 
           {/* Controls Bar */}
-          <div className="px-4 mt-2 flex items-center gap-4">
+          <div
+            className="px-4 mt-2 flex items-center gap-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Left Controls */}
             <div className="flex items-center gap-2">
               {/* Play/Pause */}

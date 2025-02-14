@@ -121,3 +121,16 @@ export const reorderModuleContent = async ({
   );
   return data;
 };
+
+export const markContentComplete = async ({
+  courseId,
+  moduleId,
+  contentId,
+  completed,
+}) => {
+  const endpoint = `/courses/${courseId}/modules/${moduleId}/content/${contentId}/${
+    completed ? "complete" : "uncomplete"
+  }`;
+  const { data } = await api.post(endpoint);
+  return data;
+};

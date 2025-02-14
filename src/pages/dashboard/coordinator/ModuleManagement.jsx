@@ -2,7 +2,6 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  ArrowLeft,
   ChevronRight,
   Clock,
   Plus,
@@ -16,21 +15,15 @@ import {
   MoreVertical,
   LayoutGrid,
   Copy,
-  ArrowUpDown,
   Settings2,
-  Filter,
   ChevronDown,
   X,
-  CheckCircle,
   Upload,
   Play,
   ExternalLink,
   BookOpen,
-  GraduationCap,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";

@@ -108,3 +108,17 @@
         transform: rotate(360deg);
     }
 }
+
+/* Add mobile-specific styles */
+@media (max-width: 768px) {
+    .video-container {
+        aspect-ratio: 16/9;
+        width: 100%;
+        height: auto !important;
+    }
+}
+
+/* Add safe area padding for mobile devices */
+.safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+}

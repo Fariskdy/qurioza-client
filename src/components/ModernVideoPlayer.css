@@ -2,6 +2,9 @@
     position: absolute;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
 }
 
 .react-player video {
@@ -179,4 +182,114 @@
 /* Progress bar played indicator */
 .progress-played {
     @apply absolute left-0 top-0 h-full bg-[#A435F0] rounded-full transition-all;
+}
+
+/* Add this new rule */
+.min-h-0 {
+    min-height: 0 !important;
+}
+
+/* Mobile video container styles */
+@media (max-width: 768px) {
+    .react-player {
+        position: relative !important;
+        padding-top: 56.25% !important;
+        /* 16:9 Aspect Ratio */
+    }
+
+    .react-player>div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .react-player video {
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Adjust center button size for mobile */
+    .react-player-center-button svg {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+/* Update existing mobile styles */
+@media (max-width: 768px) {
+    .video-controls button {
+        @apply p-2;
+    }
+
+    .video-container {
+        width: 100%;
+        height: auto !important;
+        background: #000;
+    }
+
+    /* Ensure the video wrapper maintains aspect ratio */
+    .video-wrapper {
+        position: relative;
+        padding-top: 56.25%;
+        /* 16:9 Aspect Ratio */
+        width: 100%;
+    }
+}
+
+/* Center play button hover effect */
+.react-player-center-button {
+    transition: transform 0.2s ease;
+}
+
+.react-player-center-button:hover {
+    transform: scale(1.1);
+}
+
+/* Update z-index structure */
+.react-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    /* Base layer */
+}
+
+/* Video controls need to be above the click area */
+.video-controls {
+    z-index: 35;
+    position: relative;
+}
+
+/* Progress bar needs to be clickable */
+.group\/progress {
+    z-index: 35;
+    position: relative;
+}
+
+/* Ensure dropdowns appear above other elements */
+.video-dropdown-content {
+    z-index: 40;
+}
+
+/* Volume slider should be above other controls */
+.group\/volume {
+    z-index: 36;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    /* ... existing mobile styles ... */
+
+    /* Ensure controls are more easily tappable on mobile */
+    .video-controls button {
+        @apply p-3;
+        min-height: 44px;
+        /* iOS minimum tap target size */
+        min-width: 44px;
+    }
 }

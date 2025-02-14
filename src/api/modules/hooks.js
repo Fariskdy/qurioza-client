@@ -17,6 +17,7 @@ import {
   updateModuleContent,
   deleteModuleContent,
   reorderModuleContent,
+  markContentComplete,
 } from "./mutations";
 
 // Module queries
@@ -254,6 +255,33 @@ export const useReorderModuleContent = () => {
       queryClient.invalidateQueries({
         queryKey: moduleKeys.list(courseId),
       });
+    },
+  });
+};
+
+// Update the hook to handle toggle
+export const useMarkContentComplete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: markContentComplete,
+    onSuccess: (data, { courseId }) => {
+      // Update enrolled modules query
+      queryClient.setQueryData(["modules", "enrolled", courseId], (oldData) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          progress: {
+            ...oldData.progress,
+            overall: data.progress,
+            completedModules: data.completedModules,
+            completedContent: data.completedContent,
+          },
+        };
+      });
+
+      // Also invalidate student courses to update overall progress
+      queryClient.invalidateQueries({ queryKey: ["studentCourses"] });
     },
   });
 };
