@@ -269,55 +269,60 @@ export function ModernVideoPlayer({
 
           {/* Controls Bar */}
           <div
-            className="px-4 mt-2 flex items-center gap-4"
+            className={cn(
+              "px-2 sm:px-4 mt-1 sm:mt-2 flex items-center gap-2 sm:gap-4",
+              "text-sm sm:text-base"
+            )}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Left Controls */}
-            <div className="flex items-center gap-2">
+            {/* Left Controls - More compact for mobile */}
+            <div className="flex items-center gap-1 sm:gap-2">
               {/* Play/Pause */}
               <button
                 onClick={handlePlayPause}
-                className="hover:bg-white/10 rounded-sm p-1.5 transition-colors"
+                className="hover:bg-white/10 rounded-sm p-1 sm:p-1.5 transition-colors"
               >
                 {playing ? (
-                  <Pause className="w-5 h-5 text-white fill-white" />
+                  <Pause className="w-4 h-4 sm:w-5 sm:h-5 text-white fill-white" />
                 ) : (
-                  <Play className="w-5 h-5 text-white fill-white" />
+                  <Play className="w-4 h-4 sm:w-5 sm:h-5 text-white fill-white" />
                 )}
               </button>
 
-              {/* Skip Buttons */}
-              <button
-                onClick={() => skipSeconds(-10)}
-                className="hover:bg-white/10 rounded-sm p-1.5 transition-colors"
-              >
-                <SkipBack className="w-5 h-5 text-white" />
-              </button>
-              <button
-                onClick={() => skipSeconds(10)}
-                className="hover:bg-white/10 rounded-sm p-1.5 transition-colors"
-              >
-                <SkipForward className="w-5 h-5 text-white" />
-              </button>
+              {/* Skip Buttons - Hide on mobile */}
+              <div className="hidden sm:flex items-center gap-1">
+                <button
+                  onClick={() => skipSeconds(-10)}
+                  className="hover:bg-white/10 rounded-sm p-1.5 transition-colors"
+                >
+                  <SkipBack className="w-5 h-5 text-white" />
+                </button>
+                <button
+                  onClick={() => skipSeconds(10)}
+                  className="hover:bg-white/10 rounded-sm p-1.5 transition-colors"
+                >
+                  <SkipForward className="w-5 h-5 text-white" />
+                </button>
+              </div>
 
-              {/* Time */}
-              <div className="text-white text-sm font-medium ml-2 tabular-nums">
+              {/* Time - Smaller on mobile */}
+              <div className="text-white text-xs sm:text-sm font-medium ml-1 sm:ml-2 tabular-nums">
                 {formatTime(duration * played)} / {formatTime(duration)}
               </div>
 
-              {/* Volume */}
-              <div className="flex items-center group/volume ml-2">
+              {/* Volume - Hide slider on mobile */}
+              <div className="flex items-center group/volume ml-1 sm:ml-2">
                 <button
                   onClick={() => setMuted(!muted)}
-                  className="hover:bg-white/10 rounded-sm p-1.5 transition-colors"
+                  className="hover:bg-white/10 rounded-sm p-1 sm:p-1.5 transition-colors"
                 >
                   {muted || volume === 0 ? (
-                    <VolumeX className="w-5 h-5 text-white" />
+                    <VolumeX className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                   ) : (
-                    <Volume2 className="w-5 h-5 text-white" />
+                    <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                   )}
                 </button>
-                <div className="w-0 overflow-hidden group-hover/volume:w-20 transition-all duration-300">
+                <div className="hidden sm:block w-0 overflow-hidden group-hover/volume:w-20 transition-all duration-300">
                   <Slider
                     value={[muted ? 0 : volume]}
                     max={1}
@@ -331,12 +336,12 @@ export function ModernVideoPlayer({
 
             <div className="flex-1" />
 
-            {/* Right Controls */}
-            <div className="flex items-center gap-2">
-              {/* Playback Speed */}
+            {/* Right Controls - Simplified for mobile */}
+            <div className="flex items-center gap-1 sm:gap-2">
+              {/* Playback Speed - Simplified on mobile */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="text-white text-sm hover:bg-white/10 rounded-sm px-3 py-1.5 transition-colors">
+                  <button className="text-white text-xs sm:text-sm hover:bg-white/10 rounded-sm px-2 sm:px-3 py-1 sm:py-1.5 transition-colors">
                     {playbackRate}x
                   </button>
                 </DropdownMenuTrigger>
@@ -363,25 +368,25 @@ export function ModernVideoPlayer({
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Subtitles */}
-              <button className="hover:bg-white/10 rounded-sm p-1.5 transition-colors">
-                <Subtitles className="w-5 h-5 text-white" />
-              </button>
-
-              {/* Quality */}
-              <button className="hover:bg-white/10 rounded-sm p-1.5 transition-colors">
-                <MonitorPlay className="w-5 h-5 text-white" />
-              </button>
+              {/* Subtitles and Quality - Hide on mobile */}
+              <div className="hidden sm:flex items-center gap-2">
+                <button className="hover:bg-white/10 rounded-sm p-1.5 transition-colors">
+                  <Subtitles className="w-5 h-5 text-white" />
+                </button>
+                <button className="hover:bg-white/10 rounded-sm p-1.5 transition-colors">
+                  <MonitorPlay className="w-5 h-5 text-white" />
+                </button>
+              </div>
 
               {/* Fullscreen */}
               <button
                 onClick={toggleFullscreen}
-                className="hover:bg-white/10 rounded-sm p-1.5 transition-colors"
+                className="hover:bg-white/10 rounded-sm p-1 sm:p-1.5 transition-colors"
               >
                 {fullscreen ? (
-                  <Minimize className="w-5 h-5 text-white" />
+                  <Minimize className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 ) : (
-                  <Maximize className="w-5 h-5 text-white" />
+                  <Maximize className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 )}
               </button>
             </div>

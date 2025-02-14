@@ -293,3 +293,62 @@
         min-width: 44px;
     }
 }
+
+/* Update mobile styles */
+@media (max-width: 768px) {
+  /* Adjust control sizes */
+  .video-controls button {
+    @apply p-1;
+    min-height: 32px;
+    min-width: 32px;
+  }
+
+  /* Adjust progress bar */
+  .group\/progress .h-1 {
+    height: 3px !important;
+  }
+
+  .group\/progress:hover .h-1 {
+    height: 4px !important;
+  }
+
+  /* Adjust spacing */
+  .video-controls {
+    padding: 0.5rem !important;
+  }
+
+  /* Make controls more touch-friendly */
+  .control-button {
+    @apply p-1;
+    margin: 0 2px;
+  }
+
+  /* Adjust dropdown menu */
+  .video-speed-dropdown {
+    @apply text-sm;
+    min-width: 100px;
+  }
+
+  /* Center play button size */
+  .react-player-center-button svg {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  /* Progress bar touch area */
+  .group\/progress .absolute {
+    height: 24px;
+    top: -10px;
+  }
+}
+
+/* Add touch-specific optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .video-controls button {
+    opacity: 1 !important;
+  }
+
+  .controls-overlay {
+    opacity: 1 !important;
+  }
+}
