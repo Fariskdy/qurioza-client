@@ -66,56 +66,53 @@ function App() {
   const isDashboardPage = location.pathname.startsWith("/dashboard");
 
   return (
-    <LayoutProvider>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <ScrollToTop />
-          {!isAuthPage && !isDashboardPage && <MainNav />}
-          <Routes>
-            {/* Public Routes - No Auth Required */}
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/courses/:slug" element={<CourseDetails />} />
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ScrollToTop />
+        {!isAuthPage && !isDashboardPage && <MainNav />}
+        <Routes>
+          {/* Public Routes - No Auth Required */}
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/courses/:slug" element={<CourseDetails />} />
 
-            {/* Auth Routes - Redirect if authenticated */}
-            <Route
-              path="/auth/*"
-              element={
-                <AuthRoute>
-                  <Routes>
-                    <Route path="login" element={<Login />} />
-                    <Route path="register" element={<Register />} />
-                    <Route
-                      path="forgot-password"
-                      element={<ForgotPassword />}
-                    />
-                    <Route path="reset-password" element={<ResetPassword />} />
-                  </Routes>
-                </AuthRoute>
-              }
-            />
+          {/* Auth Routes - Redirect if authenticated */}
+          <Route
+            path="/auth/*"
+            element={
+              <AuthRoute>
+                <Routes>
+                  <Route path="login" element={<Login />} />
+                  <Route path="register" element={<Register />} />
+                  <Route path="forgot-password" element={<ForgotPassword />} />
+                  <Route path="reset-password" element={<ResetPassword />} />
+                </Routes>
+              </AuthRoute>
+            }
+          />
 
-            {/* Protected Routes - Require authentication */}
-            <Route
-              path="/dashboard/*"
-              element={
-                <ProtectedRoute>
-                  <ThemeProvider>
+          {/* Protected Routes - Require authentication */}
+          <Route
+            path="/dashboard/*"
+            element={
+              <ProtectedRoute>
+                <ThemeProvider>
+                  <LayoutProvider>
                     <DashboardLayout />
-                  </ThemeProvider>
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-          {/* {ReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />} */}
-        </AuthProvider>
-      </QueryClientProvider>
-    </LayoutProvider>
+                  </LayoutProvider>
+                </ThemeProvider>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+        {/* {ReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />} */}
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 

@@ -19,6 +19,10 @@ export function ThemeProvider({ children }) {
       dashboardElement.classList.add(theme);
     }
 
+    // Apply theme to document body for full-screen modes
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(theme);
+
     // Apply theme to portal root for dialogs
     const portalRoot = document.getElementById("portal-root");
     if (!portalRoot) {

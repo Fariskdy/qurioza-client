@@ -9,6 +9,7 @@ import {
   getPopularCourses,
   getStats,
   getStudentCourses,
+  getTeacherCourses,
 } from "./queries";
 import {
   createCourse,
@@ -151,6 +152,14 @@ export const useStudentCourses = (params) => {
   return useQuery({
     queryKey: courseKeys.student(),
     queryFn: () => getStudentCourses(params),
+    keepPreviousData: true,
+  });
+};
+
+export const useTeacherCourses = (params) => {
+  return useQuery({
+    queryKey: courseKeys.teacher(),
+    queryFn: () => getTeacherCourses(params),
     keepPreviousData: true,
   });
 };

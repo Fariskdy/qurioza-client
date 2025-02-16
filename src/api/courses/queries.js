@@ -6,6 +6,7 @@ export const courseKeys = {
   detail: (slug) => [...courseKeys.all, "detail", slug],
   coordinator: () => [...courseKeys.all, "coordinator"],
   student: () => [...courseKeys.all, "student"],
+  teacher: () => [...courseKeys.all, "teacher"],
 };
 
 export const getCourses = async (params) => {
@@ -57,5 +58,10 @@ export const getStats = async () => {
 
 export const getStudentCourses = async (params) => {
   const { data } = await api.get("/courses/student/my-courses", { params });
+  return data;
+};
+
+export const getTeacherCourses = async (params) => {
+  const { data } = await api.get("/courses/teacher/my-courses", { params });
   return data;
 };

@@ -317,7 +317,7 @@ export default function CategoryManagement() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {/* <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, index) => (
           <div
             key={index}
@@ -354,7 +354,7 @@ export default function CategoryManagement() {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Main Content Card */}
       <div className="rounded-xl border bg-card shadow-sm overflow-hidden dark:border-[#2A3F47]">

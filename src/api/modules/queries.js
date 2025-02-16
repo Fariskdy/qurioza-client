@@ -24,6 +24,7 @@ export const moduleKeys = {
   ],
   public: (courseId) => [...moduleKeys.all, "public", courseId],
   enrolled: (courseId) => [...moduleKeys.all, "enrolled", courseId],
+  teacher: (courseId) => [...moduleKeys.all, "teacher", courseId],
 };
 
 /// coordinators
@@ -60,5 +61,12 @@ export const getPublicModules = async (courseId) => {
 // Enrolled student modules
 export const getEnrolledModules = async (courseId) => {
   const { data } = await api.get(`/courses/${courseId}/modules/enrolled`);
+  return data;
+};
+
+export const getTeacherModules = async (courseId) => {
+  const { data } = await api.get(`/courses/${courseId}/modules/teacher`);
+  // Log the response structure for debugging
+  console.log("Teacher modules response:", data);
   return data;
 };

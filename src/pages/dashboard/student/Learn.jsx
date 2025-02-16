@@ -450,15 +450,16 @@ export default function Learn() {
   return (
     <div
       className={cn(
-        isMobile ? "min-h-screen bg-background" : "fixed inset-0 flex",
-        "bg-gray-50 dark:bg-gray-900/50"
+        isMobile ? "min-h-screen" : "fixed inset-0 flex",
+        "bg-gray-50/50 dark:bg-gray-950"
       )}
     >
       <div
         className={cn(
           "flex flex-col w-full",
           !isMobile && "h-screen relative",
-          "bg-white dark:bg-gray-800/50 shadow-lg transition-all duration-300",
+          "bg-white dark:bg-gray-900",
+          "shadow-lg transition-all duration-300",
           !isMobile && sidebarOpen ? "lg:mr-[400px]" : "lg:mr-0"
         )}
       >
@@ -472,8 +473,10 @@ export default function Learn() {
           {/* Header */}
           <div
             className={cn(
-              "h-16 flex-shrink-0 px-4 lg:px-6 py-4 border-b border-gray-200",
-              "dark:border-gray-700/50 bg-white dark:bg-gray-800/50 backdrop-blur-sm",
+              "h-16 flex-shrink-0 px-4 lg:px-6 py-4",
+              "border-b border-gray-200 dark:border-gray-800",
+              "bg-white/80 dark:bg-gray-900/80",
+              "backdrop-blur-sm",
               "flex items-center justify-between",
               "relative z-50"
             )}
@@ -531,7 +534,7 @@ export default function Learn() {
                   variant="ghost"
                   size="icon"
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400"
                 >
                   {sidebarOpen ? (
                     <SidebarClose className="h-5 w-5" />
@@ -556,14 +559,22 @@ export default function Learn() {
           {/* Navigation Controls */}
           <div
             className={cn(
-              "h-12 flex-shrink-0 px-4 lg:px-6 py-4 border-t border-b",
-              "border-gray-200 dark:border-gray-700/50 bg-white",
-              "dark:bg-gray-800/50 backdrop-blur-sm flex items-center justify-between"
+              "h-12 flex-shrink-0 px-4 lg:px-6 py-4",
+              "border-t border-b border-gray-200 dark:border-gray-800",
+              "bg-white/80 dark:bg-gray-900/80",
+              "backdrop-blur-sm",
+              "flex items-center justify-between"
             )}
           >
             <Button
               variant="outline"
-              className="flex items-center gap-2"
+              className={cn(
+                "flex items-center gap-2",
+                "border-gray-200 dark:border-gray-700",
+                "text-gray-700 dark:text-gray-300",
+                "hover:bg-gray-100 dark:hover:bg-gray-800",
+                "disabled:text-gray-400 dark:disabled:text-gray-600"
+              )}
               disabled={activeContentIndex === 0}
               onClick={() => setActiveContentIndex((prev) => prev - 1)}
             >
@@ -572,7 +583,7 @@ export default function Learn() {
             </Button>
 
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground dark:text-gray-400">
+              <span className="text-sm text-gray-600 dark:text-gray-400">
                 {activeModule.content?.length > 0
                   ? `${activeContentIndex + 1}/${activeModule.content.length}`
                   : "0/0"}
@@ -581,7 +592,13 @@ export default function Learn() {
 
             <Button
               variant="outline"
-              className="flex items-center gap-2"
+              className={cn(
+                "flex items-center gap-2",
+                "border-gray-200 dark:border-gray-700",
+                "text-gray-700 dark:text-gray-300",
+                "hover:bg-gray-100 dark:hover:bg-gray-800",
+                "disabled:text-gray-400 dark:disabled:text-gray-600"
+              )}
               disabled={
                 !activeModule.content?.length ||
                 activeContentIndex === activeModule.content.length - 1
@@ -601,13 +618,27 @@ export default function Learn() {
               <div className="bg-background border-b border-border">
                 <div className="px-4 py-3">
                   <TabsList className="w-full">
-                    <TabsTrigger value="content" className="flex-1">
+                    <TabsTrigger
+                      value="content"
+                      className={cn(
+                        "flex-1",
+                        "text-gray-700 dark:text-gray-300",
+                        "data-[state=active]:text-violet-700 dark:data-[state=active]:text-violet-300"
+                      )}
+                    >
                       <div className="flex items-center gap-2">
                         <BookOpen className="h-4 w-4" />
                         <span>Content</span>
                       </div>
                     </TabsTrigger>
-                    <TabsTrigger value="activities" className="flex-1">
+                    <TabsTrigger
+                      value="activities"
+                      className={cn(
+                        "flex-1",
+                        "text-gray-700 dark:text-gray-300",
+                        "data-[state=active]:text-violet-700 dark:data-[state=active]:text-violet-300"
+                      )}
+                    >
                       <div className="flex items-center gap-2">
                         <ClipboardList className="h-4 w-4" />
                         <span>Activities</span>
@@ -624,14 +655,18 @@ export default function Learn() {
                     <AccordionItem
                       key={module._id}
                       value={`module-${module._id}`}
-                      className="border border-module-border rounded-lg overflow-hidden transition-colors"
+                      className={cn(
+                        "border border-gray-200 dark:border-gray-800",
+                        "rounded-lg overflow-hidden transition-colors",
+                        "bg-white dark:bg-gray-900"
+                      )}
                     >
                       <AccordionTrigger
                         className={cn(
                           "px-4 py-3 hover:no-underline transition-colors",
                           moduleIndex === activeModuleIndex
-                            ? "bg-module-active"
-                            : "hover:bg-module-hover"
+                            ? "bg-violet-50/50 dark:bg-violet-900/20"
+                            : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
                         )}
                       >
                         <div className="flex items-center gap-3">
@@ -648,7 +683,7 @@ export default function Learn() {
                           </div>
                         </div>
                       </AccordionTrigger>
-                      <AccordionContent className="bg-module-secondary">
+                      <AccordionContent className="bg-gray-50/50 dark:bg-gray-800/50">
                         <div className="p-2 space-y-1">
                           {module.content?.map((content, contentIndex) =>
                             renderContentItem(
@@ -671,7 +706,9 @@ export default function Learn() {
         {!isMobile && (
           <div
             className={cn(
-              "fixed top-0 right-0 h-full bg-background border-l border-border",
+              "fixed top-0 right-0 h-full",
+              "bg-white dark:bg-gray-900",
+              "border-l border-gray-200 dark:border-gray-800",
               "transition-all duration-300 ease-in-out overflow-hidden",
               sidebarOpen ? "w-[400px]" : "w-0"
             )}
@@ -683,16 +720,30 @@ export default function Learn() {
             >
               <Tabs defaultValue="content" className="h-full">
                 {/* Sticky Tabs Header */}
-                <div className="sticky top-0 z-10 bg-background border-b border-border">
+                <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
                   <div className="px-4 py-3">
-                    <TabsList className="w-full">
-                      <TabsTrigger value="content" className="flex-1">
+                    <TabsList className="w-full bg-gray-100/50 dark:bg-gray-800/50">
+                      <TabsTrigger
+                        value="content"
+                        className={cn(
+                          "flex-1",
+                          "text-gray-700 dark:text-gray-300",
+                          "data-[state=active]:text-violet-700 dark:data-[state=active]:text-violet-300"
+                        )}
+                      >
                         <div className="flex items-center gap-2">
                           <BookOpen className="h-4 w-4" />
                           <span>Content</span>
                         </div>
                       </TabsTrigger>
-                      <TabsTrigger value="activities" className="flex-1">
+                      <TabsTrigger
+                        value="activities"
+                        className={cn(
+                          "flex-1",
+                          "text-gray-700 dark:text-gray-300",
+                          "data-[state=active]:text-violet-700 dark:data-[state=active]:text-violet-300"
+                        )}
+                      >
                         <div className="flex items-center gap-2">
                           <ClipboardList className="h-4 w-4" />
                           <span>Activities</span>
@@ -714,14 +765,18 @@ export default function Learn() {
                               <AccordionItem
                                 key={module._id}
                                 value={`module-${module._id}`}
-                                className="border border-module-border rounded-lg overflow-hidden transition-colors"
+                                className={cn(
+                                  "border border-gray-200 dark:border-gray-800",
+                                  "rounded-lg overflow-hidden transition-colors",
+                                  "bg-white dark:bg-gray-900"
+                                )}
                               >
                                 <AccordionTrigger
                                   className={cn(
                                     "px-4 py-3 hover:no-underline transition-colors",
                                     moduleIndex === activeModuleIndex
-                                      ? "bg-module-active"
-                                      : "hover:bg-module-hover"
+                                      ? "bg-violet-50/50 dark:bg-violet-900/20"
+                                      : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
                                   )}
                                 >
                                   <div className="flex items-center gap-3">
@@ -738,7 +793,7 @@ export default function Learn() {
                                     </div>
                                   </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="bg-module-secondary">
+                                <AccordionContent className="bg-gray-50/50 dark:bg-gray-800/50">
                                   <div className="p-2 space-y-1">
                                     {module.content?.map(
                                       (content, contentIndex) =>
@@ -767,7 +822,9 @@ export default function Learn() {
                             <AccordionTrigger
                               className={cn(
                                 "flex items-center w-full py-4 px-6 hover:no-underline rounded-lg",
-                                "data-[state=open]:bg-violet-50/80 dark:data-[state=open]:bg-violet-500/10",
+                                "text-gray-700 dark:text-gray-300",
+                                "hover:bg-gray-100/50 dark:hover:bg-gray-800/50",
+                                "data-[state=open]:bg-violet-50/50 dark:data-[state=open]:bg-violet-900/20",
                                 "data-[state=open]:text-violet-700 dark:data-[state=open]:text-violet-300"
                               )}
                             >
@@ -819,7 +876,9 @@ export default function Learn() {
                             <AccordionTrigger
                               className={cn(
                                 "flex items-center w-full py-4 px-6 hover:no-underline rounded-lg",
-                                "data-[state=open]:bg-violet-50/80 dark:data-[state=open]:bg-violet-500/10",
+                                "text-gray-700 dark:text-gray-300",
+                                "hover:bg-gray-100/50 dark:hover:bg-gray-800/50",
+                                "data-[state=open]:bg-violet-50/50 dark:data-[state=open]:bg-violet-900/20",
                                 "data-[state=open]:text-violet-700 dark:data-[state=open]:text-violet-300"
                               )}
                             >

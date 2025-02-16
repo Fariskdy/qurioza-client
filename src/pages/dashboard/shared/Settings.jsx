@@ -190,13 +190,6 @@ export default function SettingsPage() {
         </p>
       </div>
 
-      <Alert className="border-yellow-500/50 dark:border-yellow-500/30 bg-yellow-50 dark:bg-yellow-500/10">
-        <AlertCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-500" />
-        <AlertDescription className="text-yellow-600 dark:text-yellow-500">
-          This is a demo version. Changes won't be persisted.
-        </AlertDescription>
-      </Alert>
-
       <Tabs defaultValue="profile">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="md:w-64">
@@ -215,14 +208,6 @@ export default function SettingsPage() {
               >
                 <KeyRound className="h-4 w-4" />
                 Security
-              </TabsTrigger>
-
-              <TabsTrigger
-                value="notifications"
-                className="w-full justify-start gap-2 px-4 py-2.5 h-10 hover:bg-violet-50 dark:hover:bg-violet-500/5 data-[state=active]:bg-violet-100 dark:data-[state=active]:bg-violet-500/10 text-muted-foreground dark:text-[#8B949E] data-[state=active]:text-violet-600 dark:data-[state=active]:text-violet-400 transition-colors"
-              >
-                <BellRing className="h-4 w-4" />
-                Notifications
               </TabsTrigger>
 
               <TabsTrigger
@@ -406,76 +391,6 @@ export default function SettingsPage() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="notifications">
-              <Card className="border dark:border-[#2A3F47] dark:bg-[#202F36]">
-                <CardHeader className="border-b dark:border-[#2A3F47]">
-                  <CardTitle className="text-xl font-semibold text-foreground dark:text-white">
-                    Notification Preferences
-                  </CardTitle>
-                  <CardDescription className="text-muted-foreground dark:text-[#8B949E]">
-                    Manage how you receive notifications.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6 pt-6">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label className="text-foreground dark:text-[#E3E5E5]">
-                          Email Notifications
-                        </Label>
-                        <p className="text-sm text-muted-foreground dark:text-[#8B949E]">
-                          Receive notifications about your account activity.
-                        </p>
-                      </div>
-                      <Switch
-                        checked={notificationSettings.emailNotifications}
-                        onCheckedChange={() =>
-                          handleNotificationChange("emailNotifications")
-                        }
-                        className="data-[state=checked]:bg-violet-600 dark:data-[state=checked]:bg-violet-500"
-                      />
-                    </div>
-                    <Separator className="dark:border-[#2A3F47]" />
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label className="text-foreground dark:text-[#E3E5E5]">
-                          Security Alerts
-                        </Label>
-                        <p className="text-sm text-muted-foreground dark:text-[#8B949E]">
-                          Get notified about security-related events.
-                        </p>
-                      </div>
-                      <Switch
-                        checked={notificationSettings.securityAlerts}
-                        onCheckedChange={() =>
-                          handleNotificationChange("securityAlerts")
-                        }
-                        className="data-[state=checked]:bg-violet-600 dark:data-[state=checked]:bg-violet-500"
-                      />
-                    </div>
-                    <Separator className="dark:border-[#2A3F47]" />
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label className="text-foreground dark:text-[#E3E5E5]">
-                          Marketing Emails
-                        </Label>
-                        <p className="text-sm text-muted-foreground dark:text-[#8B949E]">
-                          Receive updates about new features and promotions.
-                        </p>
-                      </div>
-                      <Switch
-                        checked={notificationSettings.marketingEmails}
-                        onCheckedChange={() =>
-                          handleNotificationChange("marketingEmails")
-                        }
-                        className="data-[state=checked]:bg-violet-600 dark:data-[state=checked]:bg-violet-500"
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
             <TabsContent value="appearance">
               <Card className="border dark:border-[#2A3F47] dark:bg-[#202F36]">
                 <CardHeader className="border-b dark:border-[#2A3F47]">
@@ -509,42 +424,6 @@ export default function SettingsPage() {
                           <Moon className="h-4 w-4" />
                         )}
                       </Button>
-                    </div>
-                    <Separator className="dark:border-[#2A3F47]" />
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label className="text-foreground dark:text-[#E3E5E5]">
-                          Compact Mode
-                        </Label>
-                        <p className="text-sm text-muted-foreground dark:text-[#8B949E]">
-                          Make the interface more compact.
-                        </p>
-                      </div>
-                      <Switch
-                        checked={appearanceSettings.compactMode}
-                        onCheckedChange={() =>
-                          handleAppearanceChange("compactMode")
-                        }
-                        className="data-[state=checked]:bg-violet-600 dark:data-[state=checked]:bg-violet-500"
-                      />
-                    </div>
-                    <Separator className="dark:border-[#2A3F47]" />
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label className="text-foreground dark:text-[#E3E5E5]">
-                          Animations
-                        </Label>
-                        <p className="text-sm text-muted-foreground dark:text-[#8B949E]">
-                          Enable interface animations.
-                        </p>
-                      </div>
-                      <Switch
-                        checked={appearanceSettings.animations}
-                        onCheckedChange={() =>
-                          handleAppearanceChange("animations")
-                        }
-                        className="data-[state=checked]:bg-violet-600 dark:data-[state=checked]:bg-violet-500"
-                      />
                     </div>
                   </div>
                 </CardContent>

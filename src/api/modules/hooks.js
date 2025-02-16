@@ -7,6 +7,7 @@ import {
   getModuleContentItem,
   getPublicModules,
   getEnrolledModules,
+  getTeacherModules,
 } from "./queries";
 import {
   createModule,
@@ -68,6 +69,15 @@ export const useEnrolledModules = (courseId) => {
   return useQuery({
     queryKey: moduleKeys.enrolled(courseId),
     queryFn: () => getEnrolledModules(courseId),
+    enabled: !!courseId,
+  });
+};
+
+// Teacher modules hook
+export const useTeacherModules = (courseId) => {
+  return useQuery({
+    queryKey: moduleKeys.teacher(courseId),
+    queryFn: () => getTeacherModules(courseId),
     enabled: !!courseId,
   });
 };

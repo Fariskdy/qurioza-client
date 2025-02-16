@@ -2,9 +2,15 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  BookOpen,
+  PenTool,
+  Users,
+  ChevronDown,
   Search,
+  Plus,
   School,
+  Calendar,
+  Clock,
+  Filter,
   ArrowRight,
   Loader2,
   AlertCircle,
@@ -20,10 +26,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useEnrolledBatchesWithAssignments } from "@/api/assignments/hooks";
+import { useTeacherCourses } from "@/api/courses/hooks";
 import PropTypes from "prop-types";
+import { useBatchAssignmentStats } from "@/api/assignments/hooks";
 
-const BatchAssignmentCard = ({ batch }) => {
+const BatchAssignmentCard = ({ batch, course }) => {
+  const { data: stats, isLoading: isLoadingStats } = useBatchAssignmentStats(
+    batch.id
+  );
+
   return (
     <motion.div
       whileHover={{ y: -2 }}
@@ -41,7 +52,7 @@ const BatchAssignmentCard = ({ batch }) => {
               </h3>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              {batch.course.title}
+              {course.title}
             </p>
           </div>
           <Badge
@@ -59,37 +70,60 @@ const BatchAssignmentCard = ({ batch }) => {
 
         {/* Assignment Stats */}
         <div className="grid grid-cols-3 gap-4 py-3 border-y border-gray-100 dark:border-gray-700/50">
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {batch.stats.total || 0}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Total</p>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {batch.stats.active || 0}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Active</p>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {batch.stats.completed || 0}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Completed
-            </p>
-          </div>
+          {isLoadingStats ? (
+            <div className="col-span-3 flex justify-center py-4">
+              <Loader2 className="h-6 w-6 animate-spin text-violet-600" />
+            </div>
+          ) : (
+            <>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {stats?.active || 0}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Active
+                </p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {stats?.pendingGrading || 0}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Need Grading
+                </p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {stats?.completed || 0}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Completed
+                </p>
+              </div>
+            </>
+          )}
         </div>
 
-        {/* Actions */}
-        <div className="flex justify-end">
+        {/* Schedule & Actions */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <Calendar className="w-4 h-4" />
+            <span>{batch.schedule || "Flexible Schedule"}</span>
+          </div>
           <Button
             variant="ghost"
             className="gap-2 text-violet-600 hover:text-violet-700 hover:bg-violet-50 
                        dark:text-violet-400 dark:hover:bg-violet-500/10"
             asChild
           >
-            <Link to={`/dashboard/assignments/batch/${batch._id}`}>
+            <Link
+              to={`/dashboard/batches/${batch.id}/assignments`}
+              state={{
+                courseId: course._id,
+                courseName: course.title,
+                batchName: batch.name,
+              }}
+            >
               View Assignments
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -102,25 +136,22 @@ const BatchAssignmentCard = ({ batch }) => {
 
 BatchAssignmentCard.propTypes = {
   batch: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
-    course: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-    }).isRequired,
-    stats: PropTypes.shape({
-      total: PropTypes.number,
-      active: PropTypes.number,
-      completed: PropTypes.number,
-    }).isRequired,
+    schedule: PropTypes.string,
+  }).isRequired,
+  course: PropTypes.shape({
+    title: PropTypes.string.isRequired,
   }).isRequired,
 };
 
-const StudentAssignments = () => {
+const TeacherAssignments = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const { data, isLoading, error } = useEnrolledBatchesWithAssignments();
+  const { data: coursesData, isLoading, error } = useTeacherCourses();
 
+  // Add loading state
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -129,23 +160,24 @@ const StudentAssignments = () => {
     );
   }
 
+  // Add error state
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
         <AlertCircle className="h-12 w-12 text-red-500" />
-        <p className="text-lg font-medium">Error loading assignments</p>
+        <p className="text-lg font-medium">Error loading courses</p>
         <p className="text-muted-foreground">{error.message}</p>
         <Button onClick={() => window.location.reload()}>Try Again</Button>
       </div>
     );
   }
 
-  const filteredBatches = data?.batches.filter((batch) => {
+  const filteredBatches = coursesData?.courses.filter((item) => {
     const matchesSearch =
-      batch.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      batch.course.title.toLowerCase().includes(searchQuery.toLowerCase());
+      item.batch.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.course.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus =
-      statusFilter === "all" || batch.status === statusFilter;
+      statusFilter === "all" || item.batch.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
@@ -155,10 +187,10 @@ const StudentAssignments = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            My Assignments
+            Assignments
           </h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">
-            View assignments from your ongoing and completed courses
+            Manage assignments across all your batches
           </p>
         </div>
       </div>
@@ -168,7 +200,7 @@ const StudentAssignments = () => {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
-            placeholder="Search courses..."
+            placeholder="Search batches..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 bg-white dark:bg-gray-800/90 border-gray-200/50 dark:border-gray-700/30 
@@ -185,6 +217,7 @@ const StudentAssignments = () => {
           <SelectContent className="bg-white dark:bg-gray-800/90 border-gray-200/50 dark:border-gray-700/30">
             <SelectItem value="all">All Batches</SelectItem>
             <SelectItem value="ongoing">Ongoing</SelectItem>
+            <SelectItem value="upcoming">Upcoming</SelectItem>
             <SelectItem value="completed">Completed</SelectItem>
           </SelectContent>
         </Select>
@@ -192,8 +225,12 @@ const StudentAssignments = () => {
 
       {/* Batches Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredBatches?.map((batch) => (
-          <BatchAssignmentCard key={batch._id} batch={batch} />
+        {filteredBatches?.map((item) => (
+          <BatchAssignmentCard
+            key={`${item.course._id}-${item.batch.id}`}
+            batch={item.batch}
+            course={item.course}
+          />
         ))}
       </div>
 
@@ -206,15 +243,15 @@ const StudentAssignments = () => {
         >
           <div className="max-w-md mx-auto space-y-4">
             <div className="p-4 rounded-full bg-violet-50 dark:bg-violet-500/10 w-fit mx-auto">
-              <BookOpen className="h-8 w-8 text-violet-600 dark:text-violet-400" />
+              <PenTool className="h-8 w-8 text-violet-600 dark:text-violet-400" />
             </div>
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-              No assignments found
+              No batches found
             </h3>
             <p className="text-muted-foreground dark:text-gray-400">
               {searchQuery
                 ? "Try adjusting your search or filters"
-                : "You don't have any ongoing or completed courses"}
+                : "You haven't been assigned to any batches yet"}
             </p>
           </div>
         </motion.div>
@@ -223,4 +260,4 @@ const StudentAssignments = () => {
   );
 };
 
-export default StudentAssignments;
+export default TeacherAssignments;

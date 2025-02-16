@@ -6,14 +6,9 @@ import {
   GraduationCap,
   Settings,
   Users,
-  BookMarked,
   School,
-  Calendar,
-  MessageSquare,
   BarChart2,
-  FolderPlus,
   Layers,
-  Bell,
 } from "lucide-react";
 
 export const getNavigationConfig = (userRole) => {
@@ -42,11 +37,11 @@ export const getNavigationConfig = (userRole) => {
         href: "/dashboard/quizzes",
         icon: PenTool,
       },
-      {
-        name: "Certificates",
-        href: "/dashboard/certificates",
-        icon: GraduationCap,
-      },
+      // {
+      //   name: "Certificates",
+      //   href: "/dashboard/certificates",
+      //   icon: GraduationCap,
+      // },
       {
         name: "Settings",
         href: "/dashboard/settings",
@@ -57,7 +52,7 @@ export const getNavigationConfig = (userRole) => {
     TEACHER: [
       {
         name: "Dashboard",
-        href: "/dashboard/teacher",
+        href: "/dashboard",
         icon: LayoutDashboard,
       },
       {
@@ -66,29 +61,14 @@ export const getNavigationConfig = (userRole) => {
         icon: School,
       },
       {
-        name: "Students",
-        href: "/dashboard/students",
-        icon: Users,
-      },
-      {
         name: "Assignments",
         href: "/dashboard/assignments",
         icon: ClipboardCheck,
       },
       {
-        name: "Course Material",
-        href: "/dashboard/materials",
-        icon: BookMarked,
-      },
-      {
-        name: "Schedule",
-        href: "/dashboard/schedule",
-        icon: Calendar,
-      },
-      {
-        name: "Messages",
-        href: "/dashboard/messages",
-        icon: MessageSquare,
+        name: "Quizzes",
+        href: "/dashboard/quizzes",
+        icon: PenTool,
       },
       {
         name: "Settings",
@@ -100,7 +80,7 @@ export const getNavigationConfig = (userRole) => {
     "COURSE COORDINATOR": [
       {
         name: "Overview",
-        href: "/dashboard/coordinator",
+        href: "/dashboard",
         icon: LayoutDashboard,
       },
       {
@@ -144,21 +124,21 @@ export const getNavigationConfig = (userRole) => {
           },
         ],
       },
-      {
-        name: "Analytics",
-        href: "/dashboard/analytics",
-        icon: BarChart2,
-        children: [
-          {
-            name: "Course Analytics",
-            href: "/dashboard/analytics/courses",
-          },
-          {
-            name: "Student Analytics",
-            href: "/dashboard/analytics/students",
-          },
-        ],
-      },
+      // {
+      //   name: "Analytics",
+      //   href: "/dashboard/analytics",
+      //   icon: BarChart2,
+      //   children: [
+      //     {
+      //       name: "Course Analytics",
+      //       href: "/dashboard/analytics/courses",
+      //     },
+      //     {
+      //       name: "Student Analytics",
+      //       href: "/dashboard/analytics/students",
+      //     },
+      //   ],
+      // },
       {
         name: "Settings",
         href: "/dashboard/settings",
@@ -182,11 +162,11 @@ export const getNavigationConfig = (userRole) => {
         href: "/dashboard/categories",
         icon: Layers,
       },
-      {
-        name: "Analytics",
-        href: "/dashboard/analytics",
-        icon: BarChart2,
-      },
+      // {
+      //   name: "Analytics",
+      //   href: "/dashboard/analytics",
+      //   icon: BarChart2,
+      // },
       {
         name: "Settings",
         href: "/dashboard/settings",

@@ -63,20 +63,6 @@ export default function StudentOverview() {
     },
   ];
 
-  // Mock data for certificates
-  const certificates = [
-    {
-      title: "HTML & CSS Mastery",
-      issueDate: "2024-02-15",
-      credential: "CERT-123-456",
-    },
-    {
-      title: "JavaScript Basics",
-      issueDate: "2024-01-20",
-      credential: "CERT-123-457",
-    },
-  ];
-
   return (
     <div className="space-y-8">
       {/* Welcome Section - Enhanced dark mode */}
@@ -192,7 +178,9 @@ export default function StudentOverview() {
                              dark:hover:bg-violet-600 dark:text-white group"
                     asChild
                   >
-                    <Link to={`/dashboard/courses/${enrollment.course.slug}/learn`}>
+                    <Link
+                      to={`/dashboard/courses/${enrollment.course.slug}/learn`}
+                    >
                       Continue Learning
                       <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
                     </Link>
@@ -217,14 +205,13 @@ export default function StudentOverview() {
         )}
       </section>
 
-      {/* Activity Section - Enhanced dark mode */}
-      <section className="space-y-4">
+      {/* <section className="space-y-4">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
           Learning Activities
         </h2>
 
         <div className="grid gap-4 md:grid-cols-2">
-          {/* Assignments Card - Simplified */}
+          
           <Card className="border-none shadow-md bg-white dark:bg-gray-800/50 backdrop-blur-sm">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
@@ -279,7 +266,7 @@ export default function StudentOverview() {
             </CardContent>
           </Card>
 
-          {/* Quizzes Card - Simplified */}
+         
           <Card className="border-none shadow-md bg-white dark:bg-gray-800/50 backdrop-blur-sm">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
@@ -338,60 +325,7 @@ export default function StudentOverview() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Certificates Card - Simplified */}
-        <Card className="border-none shadow-md bg-white dark:bg-gray-800/50 backdrop-blur-sm">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-full bg-green-100 dark:bg-green-500/20">
-                  <GraduationCap className="h-4 w-4 text-green-600 dark:text-green-300" />
-                </div>
-                <CardTitle className="text-base font-semibold text-gray-900 dark:text-white">
-                  Certificates Earned
-                </CardTitle>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-green-600 hover:text-green-700 dark:text-green-400 
-                         dark:hover:text-green-300"
-                asChild
-              >
-                <Link to="/dashboard/certificates">View All</Link>
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-2 md:grid-cols-2">
-              {certificates.map((cert, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-2 hover:bg-gray-50/50 
-                           dark:hover:bg-gray-700/50 rounded-lg transition-colors"
-                >
-                  <div>
-                    <p className="font-medium text-sm text-gray-900 dark:text-white">
-                      {cert.title}
-                    </p>
-                    <p className="text-xs text-muted-foreground dark:text-gray-400">
-                      Issued: {new Date(cert.issueDate).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="text-green-600 hover:text-green-700 dark:text-green-400 
-                             dark:hover:text-green-300"
-                  >
-                    View
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </section>
+      </section> */}
     </div>
   );
 }

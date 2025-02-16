@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import PropTypes from "prop-types";
 
 const LayoutContext = createContext();
 
@@ -14,4 +15,14 @@ export function LayoutProvider({ children }) {
   );
 }
 
-export const useLayout = () => useContext(LayoutContext);
+LayoutProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export const useLayout = () => {
+  const context = useContext(LayoutContext);
+  if (!context) {
+    throw new Error("useLayout must be used within a LayoutProvider");
+  }
+  return context;
+};

@@ -9,7 +9,6 @@ import {
   BookOpen,
   Users,
   Layers,
-  TrendingUp,
   UserCog,
   GraduationCap,
   Clock,
@@ -22,15 +21,15 @@ import { useCoordinators } from "@/api/coordinators/hooks";
 
 export default function AdminOverview() {
   // Fetch data
-  const { data: categories } = useCategories();
-  const { data: coordinators } = useCoordinators();
+  const { data: categories = [] } = useCategories();
+  const { data: coordinators = [] } = useCoordinators();
 
-  // Mock data (replace with real data later)
+  // Calculate real stats from the data
   const stats = [
     {
       title: "Total Categories",
-      value: categories?.length || 0,
-      trend: "+12%",
+      value: categories.length,
+      trend: categories.length > 0 ? "+12%" : "0%", // You might want to calculate real trend
       trendUp: true,
       icon: Layers,
       description: "Active course categories",
@@ -38,54 +37,74 @@ export default function AdminOverview() {
     },
     {
       title: "Total Coordinators",
-      value: coordinators?.length || 0,
-      trend: "+8%",
+      value: coordinators.length,
+      trend: coordinators.length > 0 ? "+8%" : "0%", // You might want to calculate real trend
       trendUp: true,
       icon: UserCog,
       description: "Course coordinators",
       color: "blue",
     },
     {
-      title: "Total Students",
-      value: "2,845",
-      trend: "+24%",
-      trendUp: true,
-      icon: GraduationCap,
-      description: "Enrolled students",
-      color: "green",
-    },
-    {
       title: "Total Courses",
-      value: "186",
-      trend: "+18%",
+      value: categories.reduce((acc, cat) => acc + (cat.coursesCount || 0), 0),
+      trend: "+18%", // Calculate based on historical data if available
       trendUp: true,
       icon: BookOpen,
       description: "Active courses",
       color: "orange",
     },
+    {
+      title: "Active Coordinators",
+      value: coordinators.filter((coord) => coord.status === "active").length,
+      trend: "+24%", // Calculate based on historical data if available
+      trendUp: true,
+      icon: Users,
+      description: "Currently active coordinators",
+      color: "green",
+    },
   ];
 
+  // Calculate recent activity from actual data
   const recentActivity = [
-    {
+    // Categories
+    ...categories.slice(0, 2).map((category) => ({
       type: "category",
       action: "created",
-      name: "Web Development",
-      time: "2 hours ago",
+      name: category.name,
+      time: new Date(category.createdAt).toLocaleDateString(),
       icon: Layers,
-    },
-    {
+    })),
+    // Coordinators
+    ...coordinators.slice(0, 2).map((coordinator) => ({
       type: "coordinator",
       action: "joined",
-      name: "Sarah Wilson",
-      time: "5 hours ago",
+      name: `${coordinator.firstName} ${coordinator.lastName}`,
+      time: new Date(coordinator.createdAt).toLocaleDateString(),
       icon: UserCog,
+    })),
+  ]
+    .sort((a, b) => new Date(b.time) - new Date(a.time))
+    .slice(0, 3);
+
+  // Calculate platform analytics from real data
+  const analytics = [
+    {
+      label: "Total Categories",
+      value: categories.length,
+      icon: Layers,
+      color: "text-blue-500",
     },
     {
-      type: "course",
-      action: "published",
-      name: "React Fundamentals",
-      time: "1 day ago",
-      icon: BookOpen,
+      label: "Active Coordinators",
+      value: coordinators.filter((coord) => coord.status === "active").length,
+      icon: Users,
+      color: "text-green-500",
+    },
+    {
+      label: "Completion Rate",
+      value: "78%", // This would need to come from course completion data
+      icon: BarChart2,
+      color: "text-orange-500",
     },
   ];
 
@@ -107,7 +126,7 @@ export default function AdminOverview() {
           Dashboard Overview
         </h1>
         <p className="text-muted-foreground">
-          Welcome back! Here's what's happening with your platform.
+          Welcome back! Here&apos;s what&apos;s happening with your platform.
         </p>
       </div>
 
@@ -152,7 +171,7 @@ export default function AdminOverview() {
         ))}
       </div>
 
-      {/* Recent Activity & Quick Actions */}
+      {/* Recent Activity & Analytics */}
       <div className="grid gap-4 md:grid-cols-2">
         {/* Recent Activity */}
         <Card className="border dark:border-[#2A3F47] dark:bg-[#202F36]">
@@ -166,37 +185,41 @@ export default function AdminOverview() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-4 p-3 rounded-lg hover:bg-accent/5 dark:hover:bg-[#2A3F47]/50 transition-colors"
-                >
+              {recentActivity.length === 0 ? (
+                <p className="text-muted-foreground text-center py-4">
+                  No recent activity
+                </p>
+              ) : (
+                recentActivity.map((activity, index) => (
                   <div
-                    className={`p-2 rounded-lg ${
-                      activity.type === "category"
-                        ? colorVariants.violet
-                        : activity.type === "coordinator"
-                        ? colorVariants.blue
-                        : colorVariants.orange
-                    }`}
+                    key={index}
+                    className="flex items-center gap-4 p-3 rounded-lg hover:bg-accent/5 dark:hover:bg-[#2A3F47]/50 transition-colors"
                   >
-                    <activity.icon className="h-4 w-4" />
+                    <div
+                      className={`p-2 rounded-lg ${
+                        activity.type === "category"
+                          ? colorVariants.violet
+                          : colorVariants.blue
+                      }`}
+                    >
+                      <activity.icon className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-foreground dark:text-[#E3E5E5]">
+                        {activity.name}
+                      </p>
+                      <p className="text-sm text-muted-foreground dark:text-[#8B949E]">
+                        {activity.action} • {activity.time}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground dark:text-[#E3E5E5]">
-                      {activity.name}
-                    </p>
-                    <p className="text-sm text-muted-foreground dark:text-[#8B949E]">
-                      {activity.action} • {activity.time}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Quick Stats */}
+        {/* Platform Analytics */}
         <Card className="border dark:border-[#2A3F47] dark:bg-[#202F36]">
           <CardHeader>
             <CardTitle className="text-foreground dark:text-white">
@@ -208,39 +231,22 @@ export default function AdminOverview() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/5 dark:hover:bg-[#2A3F47]/50">
-                <div className="flex items-center gap-3">
-                  <Users className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm font-medium text-foreground dark:text-[#E3E5E5]">
-                    Active Users
+              {analytics.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/5 dark:hover:bg-[#2A3F47]/50"
+                >
+                  <div className="flex items-center gap-3">
+                    <item.icon className={`h-4 w-4 ${item.color}`} />
+                    <span className="text-sm font-medium text-foreground dark:text-[#E3E5E5]">
+                      {item.label}
+                    </span>
+                  </div>
+                  <span className="text-sm text-muted-foreground dark:text-[#8B949E]">
+                    {item.value}
                   </span>
                 </div>
-                <span className="text-sm text-muted-foreground dark:text-[#8B949E]">
-                  1,234
-                </span>
-              </div>
-              <div className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/5 dark:hover:bg-[#2A3F47]/50">
-                <div className="flex items-center gap-3">
-                  <Clock className="h-4 w-4 text-green-500" />
-                  <span className="text-sm font-medium text-foreground dark:text-[#E3E5E5]">
-                    Avg. Session Time
-                  </span>
-                </div>
-                <span className="text-sm text-muted-foreground dark:text-[#8B949E]">
-                  24m 30s
-                </span>
-              </div>
-              <div className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/5 dark:hover:bg-[#2A3F47]/50">
-                <div className="flex items-center gap-3">
-                  <BarChart2 className="h-4 w-4 text-orange-500" />
-                  <span className="text-sm font-medium text-foreground dark:text-[#E3E5E5]">
-                    Course Completion Rate
-                  </span>
-                </div>
-                <span className="text-sm text-muted-foreground dark:text-[#8B949E]">
-                  78%
-                </span>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>

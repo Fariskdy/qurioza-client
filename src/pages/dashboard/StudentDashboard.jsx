@@ -7,9 +7,16 @@ const StudentOverview = lazy(() => import("./student/StudentOverview"));
 const StudentCourses = lazy(() => import("./student/StudentCourses"));
 const Learn = lazy(() => import("./student/Learn"));
 const StudentAssignments = lazy(() => import("./student/StudentAssignments"));
+const BatchAssignments = lazy(() => import("./student/BatchAssignments"));
 const StudentQuizzes = lazy(() => import("./student/StudentQuizzes"));
+const BatchQuizzes = lazy(() => import("./student/BatchQuizzes"));
 const StudentCertificates = lazy(() => import("./student/StudentCertificates"));
 const StudentSettings = lazy(() => import("./student/StudentSettings"));
+const AssignmentSubmission = lazy(() =>
+  import("./student/AssignmentSubmission")
+);
+const QuizAttempt = lazy(() => import("./student/QuizAttempt"));
+const QuizReview = lazy(() => import("./student/QuizReview"));
 
 export function StudentDashboard() {
   return (
@@ -20,13 +27,23 @@ export function StudentDashboard() {
           <Route index element={<StudentCourses />} />
           <Route path=":slug/learn" element={<Learn />} />
         </Route>
-        <Route path="assignments" element={<StudentAssignments />} />
-        <Route path="quizzes" element={<StudentQuizzes />} />
+        <Route path="assignments">
+          <Route index element={<StudentAssignments />} />
+          <Route path="batch/:batchId" element={<BatchAssignments />} />
+          <Route
+            path="batch/:batchId/assignment/:assignmentId"
+            element={<AssignmentSubmission />}
+          />
+        </Route>
+        <Route path="quizzes">
+          <Route index element={<StudentQuizzes />} />
+          <Route path="batch/:batchId" element={<BatchQuizzes />} />
+          <Route path=":quizId/attempt" element={<QuizAttempt />} />
+        </Route>
         <Route path="certificates" element={<StudentCertificates />} />
         <Route path="settings" element={<StudentSettings />} />
+        <Route path="quizzes/:quizId/review" element={<QuizReview />} />
       </Routes>
     </Suspense>
   );
 }
-
-
