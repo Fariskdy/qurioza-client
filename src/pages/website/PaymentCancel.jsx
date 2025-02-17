@@ -38,4 +38,4 @@ export function PaymentCancel() {
       </div>
     </div>
   );
-} 
+}
