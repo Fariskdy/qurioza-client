@@ -18,6 +18,8 @@ const AssignmentSubmission = lazy(() =>
 const QuizAttempt = lazy(() => import("./student/QuizAttempt"));
 const QuizReview = lazy(() => import("./student/QuizReview"));
 
+const Settings = lazy(() => import("./shared/Settings"));
+
 export function StudentDashboard() {
   return (
     <Suspense fallback={<LoadingFallback />}>
@@ -41,8 +43,8 @@ export function StudentDashboard() {
           <Route path=":quizId/attempt" element={<QuizAttempt />} />
         </Route>
         <Route path="certificates" element={<StudentCertificates />} />
-        <Route path="settings" element={<StudentSettings />} />
         <Route path="quizzes/:quizId/review" element={<QuizReview />} />
+        <Route path="settings" element={<Settings />} />
       </Routes>
     </Suspense>
   );

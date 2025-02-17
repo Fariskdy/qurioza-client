@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -23,37 +23,27 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   User,
-  Mail,
-  Phone,
-  MapPin,
-  Lock,
-  Palette,
   Shield,
   Loader2,
-  AlertCircle,
-  BellRing,
-  Globe,
   KeyRound,
-  Languages,
   LayoutGrid,
   Moon,
   Sun,
   UserCog,
+  Camera,
 } from "lucide-react";
 import { ImageUploadPreview } from "@/components/ui/image-upload";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
+import {
+  useMyProfile,
+  useUpdateProfile,
+  useUpdateAvatar,
+  useChangePassword,
+} from "@/api/profile";
+import { cn } from "@/lib/utils";
 
 // Profile Form Schema
 const profileFormSchema = z.object({
@@ -78,19 +68,21 @@ const securityFormSchema = z
     path: ["confirmPassword"],
   });
 
-// Add notification preferences schema
-const notificationSchema = z.object({
-  emailNotifications: z.boolean().default(true),
-  marketingEmails: z.boolean().default(false),
-  securityAlerts: z.boolean().default(true),
-});
-
 export default function SettingsPage() {
   const { theme, toggleTheme } = useTheme();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Profile Form
+  // Add profile hooks
+  const { data: profile, isLoading: isProfileLoading } = useMyProfile();
+  const { mutate: updateProfileMutation, isLoading: isProfileUpdating } =
+    useUpdateProfile();
+  const { mutate: updateAvatarMutation, isLoading: isAvatarUpdating } =
+    useUpdateAvatar();
+  const { mutate: changePasswordMutation, isLoading: isChangingPassword } =
+    useChangePassword();
+
+  // Profile Form with default values from profile data
   const profileForm = useForm({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -98,8 +90,22 @@ export default function SettingsPage() {
       lastName: "",
       phone: "",
       address: "",
+      avatar: "",
     },
   });
+
+  // Update form when profile data is loaded
+  useEffect(() => {
+    if (profile) {
+      profileForm.reset({
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        phone: profile.phone || "",
+        address: profile.address || "",
+        avatar: profile.avatar || "",
+      });
+    }
+  }, [profile, profileForm]);
 
   // Security Form
   const securityForm = useForm({
@@ -111,73 +117,220 @@ export default function SettingsPage() {
     },
   });
 
-  // Add these state hooks at the top of the component
-  const [notificationSettings, setNotificationSettings] = useState({
-    emailNotifications: true,
-    securityAlerts: true,
-    marketingEmails: false,
-  });
+  // Update the profile picture section
+  const ProfilePictureUpload = ({ field }) => {
+    const [previewUrl, setPreviewUrl] = useState(
+      field.value || "/default-avatar.png"
+    );
+    const [isHovered, setIsHovered] = useState(false);
 
-  const [appearanceSettings, setAppearanceSettings] = useState({
-    compactMode: false,
-    animations: true,
-  });
+    useEffect(() => {
+      if (field.value && typeof field.value === "string") {
+        setPreviewUrl(field.value);
+      }
+    }, [field.value]);
 
-  // Add these handler functions
-  const handleNotificationChange = (key) => {
-    setNotificationSettings((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+    const handleFileChange = async (file) => {
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result);
+        };
+        reader.readAsDataURL(file);
+
+        try {
+          setIsLoading(true);
+          await updateAvatarMutation(file, {
+            onSuccess: (data) => {
+              field.onChange(data.avatar);
+              toast({
+                title: "Success",
+                description: "Profile picture updated successfully",
+              });
+            },
+            onError: (error) => {
+              toast({
+                title: "Error",
+                description:
+                  error.message || "Failed to update profile picture",
+                variant: "destructive",
+              });
+              setPreviewUrl(field.value || "/default-avatar.png");
+            },
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    return (
+      <div className="flex flex-col items-center space-y-4">
+        <div
+          className="relative group"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* Avatar Container */}
+          <div
+            className={cn(
+              "relative w-32 h-32 rounded-full overflow-hidden",
+              "border-2 border-violet-500/20 dark:border-violet-500/30",
+              "transition-all duration-200",
+              isAvatarUpdating && "ring-4 ring-violet-500/30"
+            )}
+          >
+            {/* Avatar Image */}
+            <img
+              src={previewUrl}
+              alt="Profile"
+              className={cn(
+                "w-full h-full object-cover",
+                "transition-all duration-200",
+                (isHovered || isAvatarUpdating) && "scale-105 brightness-75"
+              )}
+            />
+
+            {/* Upload Overlay */}
+            <div
+              className={cn(
+                "absolute inset-0 flex flex-col items-center justify-center",
+                "bg-black/30 backdrop-blur-[1px]",
+                "transition-opacity duration-200",
+                isHovered || isAvatarUpdating ? "opacity-100" : "opacity-0"
+              )}
+            >
+              {isAvatarUpdating ? (
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="relative">
+                    <Loader2 className="w-6 h-6 text-white/40 animate-spin" />
+                    <div className="absolute inset-0 w-6 h-6 border-t-2 border-white rounded-full animate-spin" />
+                  </div>
+                  <span className="text-white text-xs font-medium animate-pulse">
+                    Uploading...
+                  </span>
+                </div>
+              ) : (
+                <>
+                  <Camera className="w-6 h-6 text-white mb-1" />
+                  <span className="text-white text-xs font-medium">
+                    Change Photo
+                  </span>
+                </>
+              )}
+            </div>
+
+            {/* File Input */}
+            <ImageUploadPreview
+              value={field.value}
+              onChange={handleFileChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              disabled={isAvatarUpdating}
+            />
+          </div>
+
+          {/* Progress Ring (visible during upload) */}
+          {isAvatarUpdating && (
+            <div className="absolute -inset-1">
+              <div className="w-full h-full rounded-full border-4 border-violet-500/20 animate-pulse" />
+            </div>
+          )}
+        </div>
+
+        {/* Helper Text */}
+        <div className="text-center space-y-1">
+          <p className="text-sm text-muted-foreground dark:text-[#8B949E]">
+            {isAvatarUpdating ? (
+              <span className="text-violet-500 dark:text-violet-400">
+                Uploading image...
+              </span>
+            ) : (
+              "Recommended: Square JPG, PNG"
+            )}
+          </p>
+          <p className="text-xs text-muted-foreground/70 dark:text-[#8B949E]/70">
+            Max 5MB
+          </p>
+        </div>
+      </div>
+    );
   };
 
-  const handleAppearanceChange = (key) => {
-    setAppearanceSettings((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
-
-  // Handle Profile Update
+  // Update the profile form submission
   const onProfileSubmit = async (data) => {
-    setIsLoading(true);
     try {
-      // API call to update profile
-      toast({
-        title: "Profile Updated",
-        description: "Your profile has been updated successfully.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update profile. Please try again.",
-        variant: "destructive",
-      });
+      setIsLoading(true);
+      await updateProfileMutation(
+        {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+          address: data.address,
+        },
+        {
+          onSuccess: () => {
+            toast({
+              title: "Success",
+              description: "Profile updated successfully",
+            });
+          },
+          onError: (error) => {
+            toast({
+              title: "Error",
+              description: error.message || "Failed to update profile",
+              variant: "destructive",
+            });
+          },
+        }
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handle Password Change
+  // Update the security form submission
   const onSecuritySubmit = async (data) => {
-    setIsLoading(true);
     try {
-      // API call to change password
-      toast({
-        title: "Password Updated",
-        description: "Your password has been changed successfully.",
-      });
-      securityForm.reset();
+      await changePasswordMutation(
+        {
+          currentPassword: data.currentPassword,
+          newPassword: data.newPassword,
+        },
+        {
+          onSuccess: () => {
+            toast({
+              title: "Success",
+              description: "Password updated successfully",
+            });
+            securityForm.reset();
+          },
+          onError: (error) => {
+            toast({
+              title: "Error",
+              description:
+                error.response?.data?.message || "Failed to change password",
+              variant: "destructive",
+            });
+          },
+        }
+      );
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to change password. Please try again.",
+        description: "An unexpected error occurred",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
+
+  // Show loading state while profile is loading
+  if (isProfileLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="h-8 w-8 animate-spin text-violet-500" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto px-6">
@@ -254,128 +407,125 @@ export default function SettingsPage() {
                       onSubmit={profileForm.handleSubmit(onProfileSubmit)}
                       className="space-y-8"
                     >
-                      <div className="flex flex-col items-center space-y-4 p-6 bg-violet-50/50 dark:bg-violet-500/5 rounded-lg border border-violet-500/20 dark:border-violet-500/10">
+                      <div className="space-y-8">
                         <FormField
                           control={profileForm.control}
                           name="avatar"
                           render={({ field }) => (
-                            <FormItem className="space-y-4 text-center">
-                              <FormLabel className="text-foreground dark:text-[#E3E5E5] text-lg font-medium">
-                                Profile Picture
-                              </FormLabel>
-                              <FormControl>
-                                <ImageUploadPreview
-                                  value={field.value}
-                                  onChange={field.onChange}
-                                  className="h-32 w-32 mx-auto"
-                                />
-                              </FormControl>
-                              <FormDescription className="text-sm text-muted-foreground dark:text-[#8B949E]">
-                                Upload a profile picture. JPG, PNG or WebP, max
-                                5MB.
-                              </FormDescription>
+                            <FormItem>
+                              <div className="p-6 bg-violet-50/50 dark:bg-violet-500/5 rounded-lg border border-violet-500/20 dark:border-violet-500/10">
+                                <ProfilePictureUpload field={field} />
+                              </div>
                             </FormItem>
                           )}
                         />
-                      </div>
 
-                      <div className="space-y-6">
-                        <div className="flex items-center gap-2">
-                          <User className="h-5 w-5 text-violet-500 dark:text-violet-400" />
-                          <h3 className="text-lg font-medium text-foreground dark:text-white">
-                            Personal Information
-                          </h3>
-                        </div>
+                        <div className="space-y-6">
+                          <div className="flex items-center gap-2">
+                            <User className="h-5 w-5 text-violet-500 dark:text-violet-400" />
+                            <h3 className="text-lg font-medium text-foreground dark:text-white">
+                              Personal Information
+                            </h3>
+                          </div>
 
-                        <div className="grid gap-6 md:grid-cols-2">
-                          <FormField
-                            control={profileForm.control}
-                            name="firstName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-foreground dark:text-[#E3E5E5]">
-                                  First Name
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    className="bg-background dark:bg-[#131F24] dark:border-[#2A3F47] dark:text-[#E3E5E5] dark:placeholder:text-[#8B949E] focus:ring-violet-500/20 dark:focus:ring-violet-500/20"
-                                  />
-                                </FormControl>
-                                <FormMessage className="text-red-500 dark:text-red-400" />
-                              </FormItem>
-                            )}
-                          />
+                          <div className="grid gap-6 md:grid-cols-2">
+                            <FormField
+                              control={profileForm.control}
+                              name="firstName"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground dark:text-[#E3E5E5]">
+                                    First Name
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      {...field}
+                                      className="bg-background dark:bg-[#131F24] dark:border-[#2A3F47] dark:text-[#E3E5E5] dark:placeholder:text-[#8B949E] focus:ring-violet-500/20 dark:focus:ring-violet-500/20"
+                                    />
+                                  </FormControl>
+                                  <FormMessage className="text-red-500 dark:text-red-400" />
+                                </FormItem>
+                              )}
+                            />
 
-                          <FormField
-                            control={profileForm.control}
-                            name="lastName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-foreground dark:text-[#E3E5E5]">
-                                  Last Name
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    className="bg-background dark:bg-[#131F24] dark:border-[#2A3F47] dark:text-[#E3E5E5] dark:placeholder:text-[#8B949E] focus:ring-violet-500/20 dark:focus:ring-violet-500/20"
-                                  />
-                                </FormControl>
-                                <FormMessage className="text-red-500 dark:text-red-400" />
-                              </FormItem>
-                            )}
-                          />
+                            <FormField
+                              control={profileForm.control}
+                              name="lastName"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground dark:text-[#E3E5E5]">
+                                    Last Name
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      {...field}
+                                      className="bg-background dark:bg-[#131F24] dark:border-[#2A3F47] dark:text-[#E3E5E5] dark:placeholder:text-[#8B949E] focus:ring-violet-500/20 dark:focus:ring-violet-500/20"
+                                    />
+                                  </FormControl>
+                                  <FormMessage className="text-red-500 dark:text-red-400" />
+                                </FormItem>
+                              )}
+                            />
 
-                          <FormField
-                            control={profileForm.control}
-                            name="phone"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-foreground dark:text-[#E3E5E5]">
-                                  Phone Number
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    type="tel"
-                                    placeholder="+1 (555) 000-0000"
-                                    {...field}
-                                    className="bg-background dark:bg-[#131F24] dark:border-[#2A3F47] dark:text-[#E3E5E5] dark:placeholder:text-[#8B949E] focus:ring-violet-500/20 dark:focus:ring-violet-500/20"
-                                  />
-                                </FormControl>
-                                <FormMessage className="text-red-500 dark:text-red-400" />
-                              </FormItem>
-                            )}
-                          />
+                            <FormField
+                              control={profileForm.control}
+                              name="phone"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground dark:text-[#E3E5E5]">
+                                    Phone Number
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="tel"
+                                      placeholder="+1 (555) 000-0000"
+                                      {...field}
+                                      className="bg-background dark:bg-[#131F24] dark:border-[#2A3F47] dark:text-[#E3E5E5] dark:placeholder:text-[#8B949E] focus:ring-violet-500/20 dark:focus:ring-violet-500/20"
+                                    />
+                                  </FormControl>
+                                  <FormMessage className="text-red-500 dark:text-red-400" />
+                                </FormItem>
+                              )}
+                            />
 
-                          <FormField
-                            control={profileForm.control}
-                            name="address"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-foreground dark:text-[#E3E5E5]">
-                                  Address
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="123 Street, City, Country"
-                                    {...field}
-                                    className="bg-background dark:bg-[#131F24] dark:border-[#2A3F47] dark:text-[#E3E5E5] dark:placeholder:text-[#8B949E] focus:ring-violet-500/20 dark:focus:ring-violet-500/20"
-                                  />
-                                </FormControl>
-                                <FormMessage className="text-red-500 dark:text-red-400" />
-                              </FormItem>
-                            )}
-                          />
+                            <FormField
+                              control={profileForm.control}
+                              name="address"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground dark:text-[#E3E5E5]">
+                                    Address
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      placeholder="123 Street, City, Country"
+                                      {...field}
+                                      className="bg-background dark:bg-[#131F24] dark:border-[#2A3F47] dark:text-[#E3E5E5] dark:placeholder:text-[#8B949E] focus:ring-violet-500/20 dark:focus:ring-violet-500/20"
+                                    />
+                                  </FormControl>
+                                  <FormMessage className="text-red-500 dark:text-red-400" />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
                         </div>
                       </div>
 
                       <div className="flex justify-end pt-4">
                         <Button
                           type="submit"
-                          disabled={isLoading}
+                          disabled={
+                            isLoading ||
+                            isProfileLoading ||
+                            isProfileUpdating ||
+                            isAvatarUpdating
+                          }
                           className="bg-violet-600 hover:bg-violet-700 dark:bg-gradient-to-r dark:from-violet-600 dark:to-violet-500 dark:hover:from-violet-700 dark:hover:to-violet-600 text-white min-w-[120px]"
                         >
-                          {isLoading ? (
+                          {isLoading ||
+                          isProfileLoading ||
+                          isProfileUpdating ||
+                          isAvatarUpdating ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                               Saving...
@@ -531,10 +681,10 @@ export default function SettingsPage() {
                         <div className="flex justify-end">
                           <Button
                             type="submit"
-                            disabled={isLoading}
+                            disabled={isLoading || isChangingPassword}
                             className="bg-violet-600 hover:bg-violet-700 dark:bg-gradient-to-r dark:from-violet-600 dark:to-violet-500 dark:hover:from-violet-700 dark:hover:to-violet-600 text-white min-w-[140px]"
                           >
-                            {isLoading ? (
+                            {isLoading || isChangingPassword ? (
                               <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 Updating...

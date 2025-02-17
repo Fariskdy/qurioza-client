@@ -14,6 +14,9 @@ const AssignmentSubmissions = lazy(() =>
   import("./teacher/AssignmentSubmissions")
 );
 
+const Settings = lazy(() => import("./shared/Settings"));
+
+
 export function TeacherDashboard() {
   return (
     <Suspense fallback={<LoadingFallback />}>
@@ -29,6 +32,7 @@ export function TeacherDashboard() {
           path="batches/:batchId/assignments/:assignmentId/submissions"
           element={<AssignmentSubmissions />}
         />
+        <Route path="settings" element={<Settings />} />
       </Routes>
     </Suspense>
   );
