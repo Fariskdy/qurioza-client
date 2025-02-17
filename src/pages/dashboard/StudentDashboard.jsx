@@ -11,7 +11,6 @@ const BatchAssignments = lazy(() => import("./student/BatchAssignments"));
 const StudentQuizzes = lazy(() => import("./student/StudentQuizzes"));
 const BatchQuizzes = lazy(() => import("./student/BatchQuizzes"));
 const StudentCertificates = lazy(() => import("./student/StudentCertificates"));
-const StudentSettings = lazy(() => import("./student/StudentSettings"));
 const AssignmentSubmission = lazy(() =>
   import("./student/AssignmentSubmission")
 );
