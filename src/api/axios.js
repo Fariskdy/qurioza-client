@@ -3,11 +3,22 @@ import { showErrorToast } from "@/lib/toast-utils";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Enable cookie-based auth
 });
+
+// Add request interceptor to include credentials
+api.interceptors.request.use(
+  (config) => {
+    config.withCredentials = true;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Add request interceptor for debugging
 api.interceptors.request.use(

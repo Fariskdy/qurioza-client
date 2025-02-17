@@ -26,6 +26,7 @@ import { DashboardLayout } from "./components/dashboard/DashboardLayout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LayoutProvider } from "@/contexts/LayoutContext";
 import PropTypes from "prop-types";
+import { PaymentSuccess } from "@/pages/website/PaymentSuccess";
 
 // Only import DevTools in development
 const ReactQueryDevtools = import.meta.env.DEV
@@ -80,6 +81,7 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:slug" element={<CourseDetails />} />
+          <Route path="/payment/success" element={<PaymentSuccess />} />
 
           {/* Auth Routes - Redirect if authenticated */}
           <Route

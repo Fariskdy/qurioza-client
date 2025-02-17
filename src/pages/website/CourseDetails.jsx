@@ -23,7 +23,7 @@ import { SimpleFooter } from "@/components/SimpleFooter";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCourse, useRelatedCourses } from "@/api/courses/hooks";
 import { VideoPlayer } from "@/components/VideoPlayer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { usePublicModules } from "@/api/modules/hooks";
 import { useEnrollingBatch } from "@/api/batches";
@@ -31,9 +31,10 @@ import { useEnrollInBatch } from "@/api/enrollments";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "@/hooks/use-toast";
 import { useEnrollments } from "@/api/enrollments";
-import { useQueryClient } from "@tanstack/react-query";
-import { batchKeys } from "@/api/batches";
-import { enrollmentKeys } from "@/api/enrollments";
+import { loadStripe } from "@stripe/stripe-js";
+
+// Initialize Stripe
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 export function CourseDetails() {
   const params = useParams();
@@ -47,6 +48,13 @@ export function CourseDetails() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Move useEffect inside the component
+  useEffect(() => {
+    if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+      console.error("Stripe public key is missing");
+    }
+  }, []);
+
   const { data: course, isLoading, error } = useCourse(slug);
   const { data: relatedCourses, isLoading: relatedCoursesLoading } =
     useRelatedCourses(slug);
@@ -59,14 +67,15 @@ export function CourseDetails() {
   const enrollMutation = useEnrollInBatch();
 
   // Add query to check user's enrollments
-  const { data: userEnrollments, isLoading: isLoadingEnrollments } =
+  const { data: userEnrollments = [], isLoading: isLoadingEnrollments } =
     useEnrollments();
-  const queryClient = useQueryClient(); // Add this
 
   // Helper function to check if user is enrolled in current course
-  const userEnrollment = userEnrollments?.find(
-    (enrollment) => enrollment.batch.course._id === course?._id
-  );
+  const userEnrollment =
+    course &&
+    userEnrollments?.find(
+      (enrollment) => enrollment.batch?.course?._id === course._id
+    );
 
   // Don't make the API call if there's no slug
   const enabled = Boolean(slug);
@@ -76,9 +85,6 @@ export function CourseDetails() {
   const [enrollmentError, setEnrollmentError] = useState(null);
 
   const handleEnroll = async () => {
-    // Reset any previous errors
-    setEnrollmentError(null);
-
     if (!user) {
       navigate("/auth/login", {
         state: { from: location.pathname },
@@ -86,33 +92,34 @@ export function CourseDetails() {
       return;
     }
 
-    if (!enrollingBatch) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "No batch available for enrollment",
-      });
-      return;
-    }
-
     try {
-      await enrollMutation.mutateAsync(enrollingBatch._id);
-      // Refetch enrolling batch and user enrollments
-      queryClient.invalidateQueries(batchKeys.enrolling(course._id));
-      queryClient.invalidateQueries(enrollmentKeys.list());
+      // Create payment session
+      const response = await enrollMutation.mutateAsync(enrollingBatch._id);
+      console.log("Payment session response:", response);
 
-      toast({
-        title: "Success",
-        description: "Successfully enrolled in the course!",
+      // Get Stripe instance
+      const stripe = await stripePromise;
+      if (!stripe) {
+        throw new Error("Failed to initialize Stripe");
+      }
+
+      // Redirect to Stripe Checkout
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: response.sessionId,
       });
-      // Optionally redirect to dashboard
-      navigate("/dashboard/courses");
+
+      if (error) {
+        console.error("Stripe checkout error:", error);
+        throw error;
+      }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Failed to enroll";
+      console.error("Enrollment error:", error);
+      const errorMessage =
+        error.response?.data?.message || "Failed to initiate payment";
       setEnrollmentError(errorMessage);
       toast({
         variant: "destructive",
-        title: "Enrollment Failed",
+        title: "Payment Error",
         description: errorMessage,
       });
     }
@@ -443,7 +450,9 @@ export function CourseDetails() {
             <section className="rounded-xl border bg-card p-6 space-y-6">
               <div className="flex items-center gap-2">
                 <BookOpen className="h-6 w-6 text-violet-600" />
-                <h2 className="text-2xl font-semibold">What you'll learn</h2>
+                <h2 className="text-2xl font-semibold">
+                  What you&apos;ll learn
+                </h2>
               </div>
               <div className="grid sm:grid-cols-2 gap-6">
                 {course.learningOutcomes.map((outcome, index) => (
@@ -514,10 +523,7 @@ export function CourseDetails() {
                       <div className="h-12 bg-zinc-100 rounded-lg mb-2" />
                       <div className="pl-12 space-y-2">
                         {[1, 2].map((j) => (
-                          <div
-                            key={j}
-                            className="h-8 bg-zinc-50 rounded"
-                          />
+                          <div key={j} className="h-8 bg-zinc-50 rounded" />
                         ))}
                       </div>
                     </div>
