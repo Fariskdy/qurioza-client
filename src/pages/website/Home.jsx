@@ -24,6 +24,7 @@ import {
   usePopularCourses,
   useStats,
 } from "@/api/courses/hooks";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Home() {
   const [activeCard, setActiveCard] = useState(0);
@@ -34,6 +35,7 @@ export function Home() {
   const { data: popularCourses, isLoading: popularLoading } =
     usePopularCourses();
   const { data: stats } = useStats();
+  const { isAuthenticated } = useAuth();
 
   const handleNextCard = useCallback(() => {
     setActiveCard((prev) =>
@@ -126,20 +128,40 @@ export function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-8 sm:mb-10">
-              <Button
-                size="lg"
-                className="w-full sm:w-auto h-12 px-8 text-base"
-              >
-                Get Started
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              {isAuthenticated ? (
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto h-12 px-8 text-base"
+                  asChild
+                >
+                  <Link to="/dashboard">
+                    Go to Dashboard
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              ) : (
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto h-12 px-8 text-base"
+                  asChild
+                >
+                  <Link to="/auth/register">
+                    Get Started
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              )}
+
               <Button
                 size="lg"
                 variant="outline"
                 className="w-full sm:w-auto h-12 px-8 text-base"
+                asChild
               >
-                Browse Courses
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <Link to="/courses">
+                  Browse Courses
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </div>
 
