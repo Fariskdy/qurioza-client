@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GraduationCap, Mail, Lock, ArrowRight, User } from "lucide-react";
+import { GraduationCap, Mail, Lock, User } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "sonner";
 import authIllustration from "@/assets/illustrations/auth-illustration.svg";
 
 export function Register() {
   const navigate = useNavigate();
-  const { register, error } = useAuth();
+  const { register } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -27,14 +27,16 @@ export function Register() {
       ...prev,
       [e.target.id]: e.target.value,
     }));
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
     try {
-      await register({
+      const userData = {
         username: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
         password: formData.password,
@@ -43,11 +45,15 @@ export function Register() {
         lastName: formData.lastName,
         phone: formData.phone,
         address: formData.address,
-      });
-      toast.success("Registration successful!");
+      };
+
+      await register(userData);
       navigate("/dashboard");
-    } catch (err) {
-      toast.error(error || "Registration failed. Please try again.");
+    } catch (error) {
+      setError(
+        error?.response?.data?.message ||
+          "Registration failed. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -87,6 +93,25 @@ export function Register() {
                 Start your learning journey with Qurioza
               </p>
             </div>
+
+            {/* Updated Error Message Design */}
+            {error && (
+              <div className="flex items-center gap-2 text-sm border border-red-200 bg-red-50 text-red-600 dark:border-red-900/50 dark:bg-red-900/10 dark:text-red-400 px-4 py-3 rounded-md">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-5 h-5 shrink-0"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <p>{error}</p>
+              </div>
+            )}
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">

@@ -87,10 +87,10 @@ export function AuthProvider({ children }) {
   };
 
   // Reset password
-  const resetPassword = async (email) => {
+  const resetPassword = async (token, password) => {
     try {
       setError(null);
-      await api.post("/api/auth/reset-password", { email });
+      await api.post(`/auth/reset-password/${token}`, { password });
     } catch (err) {
       setError(err.response?.data?.message || "Password reset failed");
       throw err;
@@ -108,6 +108,27 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const register = async (userData) => {
+    try {
+      const { data } = await api.post("/auth/register", userData);
+      setUser(data.user);
+      return data.user;
+    } catch (error) {
+      console.error("Registration error:", error);
+      throw error; // Rethrow to handle in the component
+    }
+  };
+
+  const forgotPassword = async (email) => {
+    try {
+      setError(null);
+      await api.post("/auth/forgot-password", { email });
+    } catch (err) {
+      setError(err.response?.data?.message || "Password reset request failed");
+      throw err;
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -119,6 +140,8 @@ export function AuthProvider({ children }) {
     resetPassword,
     verifyEmail,
     isAuthenticated: !!user,
+    register,
+    forgotPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

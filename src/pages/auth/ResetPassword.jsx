@@ -1,9 +1,62 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GraduationCap, Lock, ArrowRight } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function ResetPassword() {
+  const { token } = useParams();
+  const navigate = useNavigate();
+  const { resetPassword } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.id]: e.target.value,
+    }));
+    setError("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    // Validate password strength
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await resetPassword(token, formData.password);
+      navigate("/auth/login", {
+        state: { message: "Password reset successful. Please login." },
+      });
+    } catch (error) {
+      setError(
+        error?.response?.data?.message ||
+          "Failed to reset password. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background relative flex overflow-hidden">
       {/* Background Design */}
@@ -39,8 +92,27 @@ export function ResetPassword() {
               </div>
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <div className="flex items-center gap-2 text-sm border border-red-200 bg-red-50 text-red-600 dark:border-red-900/50 dark:bg-red-900/10 dark:text-red-400 px-4 py-3 rounded-md">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-5 h-5 shrink-0"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <p>{error}</p>
+              </div>
+            )}
+
             {/* Form */}
-            <form className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-4">
                 <div>
                   <label
@@ -54,9 +126,12 @@ export function ResetPassword() {
                     <Input
                       id="password"
                       type="password"
+                      value={formData.password}
+                      onChange={handleChange}
                       placeholder="Enter new password"
                       className="pl-9"
                       required
+                      minLength={8}
                     />
                   </div>
                 </div>
@@ -72,6 +147,8 @@ export function ResetPassword() {
                     <Input
                       id="confirmPassword"
                       type="password"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
                       placeholder="Confirm new password"
                       className="pl-9"
                       required
@@ -79,9 +156,18 @@ export function ResetPassword() {
                   </div>
                 </div>
               </div>
-              <Button type="submit" className="w-full group">
-                Reset password
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <Button type="submit" className="w-full group" disabled={loading}>
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="h-4 w-4 border-2 border-current border-r-transparent rounded-full animate-spin" />
+                    Resetting...
+                  </span>
+                ) : (
+                  <>
+                    Reset password
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </Button>
             </form>
 
